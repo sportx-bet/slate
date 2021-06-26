@@ -291,7 +291,7 @@
     </script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -302,6 +302,7 @@
       <img src="images/logo-a624221e.png" class="logo" alt="" />
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="javascript">javascript</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -347,6 +348,47 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#live-scores" class="toc-h1 toc-link" data-title="Live scores">Live scores</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-live-scores" class="toc-h2 toc-link" data-title="Get live scores">Get live scores</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#metadata" class="toc-h1 toc-link" data-title="Metadata">Metadata</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-metadata" class="toc-h2 toc-link" data-title="Get metadata">Get metadata</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#orders" class="toc-h1 toc-link" data-title="Orders">Orders</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-active-orders" class="toc-h2 toc-link" data-title="Get active orders">Get active orders</a>
+                  </li>
+                  <li>
+                    <a href="#post-a-new-order" class="toc-h2 toc-link" data-title="Post a new order">Post a new order</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#unit-conversion" class="toc-h1 toc-link" data-title="Unit Conversion">Unit Conversion</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#tokens" class="toc-h2 toc-link" data-title="Tokens">Tokens</a>
+                  </li>
+                  <li>
+                    <a href="#odds" class="toc-h2 toc-link" data-title="Odds">Odds</a>
+                  </li>
+                  <li>
+                    <a href="#odds-display-on-sportx" class="toc-h2 toc-link" data-title="Odds display on sportx">Odds display on sportx</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
     </div>
     <div class="page-wrapper">
@@ -360,7 +402,7 @@
 <p>We support betting in DAI, WETH, and USDC.</p>
 
 <p>If you wish to use our wrapper for javascript you can do so <a href="https://github.com/sportx-bet/sportx-js">here</a></p>
-<h1 id='markets'>Markets</h1><h2 id='get-active-markets'>Get active markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://stage.api.sportx.bet/markets/active?onlyMainLine=true'</span>
+<h1 id='markets'>Markets</h1><h2 id='get-active-markets'>Get active markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/active?onlyMainLine=true'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -436,7 +478,7 @@
 </span></code></pre></div>
 <p>This endpoint retrieves active markets on the exchange</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://stage.api.sportx.bet/markets/active</code></p>
+<p><code>GET https://app.api.sportx.bet/markets/active</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
 <table><thead>
 <tr>
@@ -616,7 +658,7 @@
 <li><code>MONEY_LINE</code></li>
 <li><code>OUTRIGHT_WINNER</code></li>
 </ul>
-<h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://stage.api.sportx.bet/markets/find'</span> <span class="se">\</span>
+<h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/markets/find'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "marketHashes": ["0x3cba25f2253035b015b9bb555c1bf900f6737704d57425dd2a5b60e929c33b81"]
@@ -657,7 +699,7 @@
 </span></code></pre></div>
 <p>This endpoint retrieves specific markets</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://stage.api.sportx.bet/markets/find</code></p>
+<p><code>POST https://app.api.sportx.bet/markets/find</code></p>
 <h3 id='request-format'>Request format</h3>
 <table><thead>
 <tr>
@@ -695,7 +737,7 @@
 </tbody></table>
 
 <p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted</p>
-<h2 id='popular-markets'>Popular markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://stage.api.sportx.bet/markets/popular'</span>
+<h2 id='popular-markets'>Popular markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/popular'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -748,7 +790,7 @@
 </span></code></pre></div>
 <p>This endpoint retrieves the top 10 popular markets by volume.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET https://stage.api.sportx.bet/markets/popular</code></p>
+<p><code>GET https://app.api.sportx.bet/markets/popular</code></p>
 <h3 id='response-format-3'>Response format</h3>
 <table><thead>
 <tr>
@@ -770,76 +812,76 @@
 </tbody></table>
 
 <p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted</p>
-<h1 id='leagues'>Leagues</h1><h2 id='get-leagues'>Get leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://stage.api.sportx.bet/leagues'</span>
+<h1 id='leagues'>Leagues</h1><h2 id='get-leagues'>Get leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/leagues'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Memorial Tournament_Round 1"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Masters_Round 1"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NBA"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US Open_Round 4"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wells Fargo Championship_Round 1"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RBC Heritage_Round 4"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NHL"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UFC"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Memorial Tournament_Round 1"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Masters_Round 1"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NBA"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">28</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"US Open_Round 4"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wells Fargo Championship_Round 1"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">37</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RBC Heritage_Round 4"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NHL"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UFC"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns all the leagues supported by SportX</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://stage.api.sportx.bet/leagues</code></p>
+<p><code>GET https://app.api.sportx.bet/leagues</code></p>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
@@ -895,72 +937,72 @@
 <td>Instructions to the client of how to show the team names for markets in this league. <code>true</code> if the home team is <code>teamOneName</code>, <code>false</code> if the home team is <code>teamTwoName</code></td>
 </tr>
 </tbody></table>
-<h2 id='get-active-leagues'>Get active leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://stage.api.sportx.bet/leagues/active'</span>
+<h2 id='get-active-leagues'>Get active leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/leagues/active'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UFC"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10065</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bitcoin"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10064</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ethereum"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">171</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MLB"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NBA"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1290</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">" Azerbaijan GP"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1265</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WNBA"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UFC"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10065</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bitcoin"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10064</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ethereum"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">171</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MLB"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NBA"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1290</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">" Azerbaijan GP"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1265</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WNBA"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numberOfEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns all the currently active leagues with markets in them</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET https://stage.api.sportx.bet/leagues/active</code></p>
+<p><code>GET https://app.api.sportx.bet/leagues/active</code></p>
 <h3 id='response-format-2'>Response format</h3>
 <p>See <a href="#get-leagues">get leagues section</a> for how the <code>League</code> object is formatted</p>
-<h1 id='trades'>Trades</h1><h2 id='get-active-trades'>Get active trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://stage.api.sportx.bet/trades'</span>
+<h1 id='trades'>Trades</h1><h2 id='get-active-trades'>Get active trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/trades'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1055,7 +1097,7 @@
 </span></code></pre></div>
 <p>This endpoint retrieves past trades on the exchange split up by order. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://stage.api.sportx.bet/trades</code></p>
+<p><code>POST https://app.api.sportx.bet/trades</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -1222,7 +1264,7 @@
 <aside class="notice">
 To convert the <code>stake</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC.
 </aside>
-<h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://stage.api.sportx.bet/trades/consolidated'</span> <span class="se">\</span>
+<h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/trades/consolidated'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json''
 </span></code></pre></div>
 <blockquote>
@@ -1277,7 +1319,7 @@ To convert the <code>stake</code> into a readable token amount, divide by 10^18 
 </span></code></pre></div>
 <p>This endpoint retrieves past consolidated trades on the exchange via pagination. If a trade fills multiple orders, it will show up as one entry here per bettor.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://stage.api.sportx.bet/trades/consolidated</code></p>
+<p><code>POST https://app.api.sportx.bet/trades/consolidated</code></p>
 <h3 id='request-payload-parameters-2'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -1444,11 +1486,776 @@ To convert the <code>stake</code> into a readable token amount, divide by 10^18 
 <td>With <code>settled=true</code>, this will be 0, 1, or 2 depending on the final outcome of the market</td>
 </tr>
 </tbody></table>
+<h1 id='live-scores'>Live scores</h1><h2 id='get-live-scores'>Get live scores</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/live-scores'</span> <span class="se">\</span>
+<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7011313"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-05-27T18:56:45.128Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"currentPeriod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Full time"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"extra"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Balls</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bases</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0/0/1</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Strikes</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Outs</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">3</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Turn</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">}]"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">171</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"periodTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-1"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"periods"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1st Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2nd Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3rd Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4th Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5th Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6th Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7th Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Full time"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8th Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9th Inning"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"provider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LSPORT"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-05-28T16:39:29.410Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7011313"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint retrieves live scores for a particular event ID.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>POST https://app.api.sportx.bet/live-scores</code></p>
+<h3 id='request-payload'>Request payload</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sportXEventIds</td>
+<td>true</td>
+<td>string[]</td>
+<td>An array of event IDs</td>
+</tr>
+</tbody></table>
+<h3 id='response-format'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Score[]</td>
+<td>The resulting scores for the fixtures passed in</td>
+</tr>
+</tbody></table>
+
+<p>A <code>Score</code> object has the following format</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currentPeriod</td>
+<td>string</td>
+<td>The current period label</td>
+</tr>
+<tr>
+<td>extra</td>
+<td>string</td>
+<td>Extra data for this match</td>
+</tr>
+<tr>
+<td>leagueID</td>
+<td>number</td>
+<td>The league ID for this match</td>
+</tr>
+<tr>
+<td>periodTime</td>
+<td>number</td>
+<td>The time in the period. If it&#39;s -1, it is not available or the game is finished</td>
+</tr>
+<tr>
+<td>periods</td>
+<td>Period[]</td>
+<td>All of the periods in the match</td>
+</tr>
+</tbody></table>
+
+<p>A <code>Period</code> object has the following format</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>label</td>
+<td>string</td>
+<td>The current period name</td>
+</tr>
+<tr>
+<td>isFinished</td>
+<td>boolean</td>
+<td><code>true</code> if the period is over</td>
+</tr>
+<tr>
+<td>teamOneScore</td>
+<td>string</td>
+<td>The score of team one in this period</td>
+</tr>
+<tr>
+<td>teamTwoScore</td>
+<td>string</td>
+<td>The score of team two in this period</td>
+</tr>
+</tbody></table>
+<h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/metadata'</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"executorAddress"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E91041b9e60C7275f8296b8B0a97141e6442d49"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"oracleFees"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4000000000000000000"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"sportXAffiliate"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xA216136Ac816FC1E816af5FffDC9E58281e14383"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"makerOrderMinimums"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"takerMinimums"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2500000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5000000"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"addresses"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"1"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"DAI"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x6B175474E89094C44Da98b954EedeAC495271d0F"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"SX"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x99fE3B1391503A1bC1788051347A1324bff41452"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"USDC"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"137"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"DAI"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"WETH"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"USDC"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"bettingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"depositMinimums"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"0x6B175474E89094C44Da98b954EedeAC495271d0F"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x99fE3B1391503A1bC1788051347A1324bff41452"</span><span class="p">:</span><span class="w"> </span><span class="s2">"500000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000000"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"withdrawMinimums"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x840195888Db4D6A99ED9F73FcD3B225Bb3cB1A79"</span><span class="p">:</span><span class="w"> </span><span class="s2">"500000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000000"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"totalVolume"</span><span class="p">:</span><span class="w"> </span><span class="mf">11098310.470151696</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint retrieves metadata on the exchange itself and useful parameters to interact with the exchange.</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>GET https://app.api.sportx.bet/metadata</code></p>
+<h3 id='response-format'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not</td>
+</tr>
+<tr>
+<td>data</td>
+<td>any</td>
+<td>The metadata for the exchange</td>
+</tr>
+<tr>
+<td>executorAddress</td>
+<td>string</td>
+<td>The executor address for the sportx.bet exchange. Use this address for setting the <code>executor</code> when posting new orders as a market maker</td>
+</tr>
+<tr>
+<td>oracleFees</td>
+<td>any</td>
+<td>A mapping from token address to a percentage indicating the fees paid on profit for each token. To convert to a readable number, divide by 10^20</td>
+</tr>
+<tr>
+<td>sportXAffiliate</td>
+<td>any</td>
+<td>The default sportx.bet affiliate. Currently set to 0 and unused</td>
+</tr>
+<tr>
+<td>makerOrderMinimums</td>
+<td>any</td>
+<td>A mapping from token address to a real token amount indicating the minimum maker order size.</td>
+</tr>
+<tr>
+<td>takerMinimums</td>
+<td>any</td>
+<td>A mapping from token address to a real token amount indicating the minimum taker order size</td>
+</tr>
+<tr>
+<td>addresses</td>
+<td>any</td>
+<td>A mapping from network id -&gt; canonical token name -&gt; token address of assets supported by the exchange</td>
+</tr>
+<tr>
+<td>bettingEnabled</td>
+<td>boolean</td>
+<td><code>true</code> if betting is enabled for your region, false otherwise. See <a href="https://help.sportx.bet/en/articles/3613372-terms-and-conditions">here</a> for the supported regions</td>
+</tr>
+<tr>
+<td>depositMinimums</td>
+<td>any</td>
+<td>A mapping from token address to real token amount indicating the minimum amount required to bridge from Ethereum mainnet to Polygon</td>
+</tr>
+<tr>
+<td>withdrawMinimums</td>
+<td>any</td>
+<td>A mapping from token address to real token amount indicating the minimum amount required to bridge from Polygon to Ethereum mainnet</td>
+</tr>
+<tr>
+<td>totalVolume</td>
+<td>number</td>
+<td>All time total volume on the exchange</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+To convert the <code>makerOrderMinimums</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC. For USDC divide by 10^6.
+</aside>
+
+<aside class="notice">
+To convert the <code>takerMinimums</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC. For USDC divide by 10^6.
+</aside>
+<h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders'</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb46e5fff6498f061e93c4f5ed501ee72d924180d6aa78cdfd4d188d3383c91d4"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x63a4491dC73245E181c47BAe0ae9d6627E56dE55"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"totalBetSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"percentageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70455284072443640000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="mi">1631233201</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"executor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E91041b9e60C7275f8296b8B0a97141e6442d49"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69415402816762328320330277846098411244657139277332120954321492419616371539163"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isMakerBettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2aaea5b7c86166c0fbf2745c66aff794a23d21ac71ee143d08706700adbb59aa4c9b862286cf736acae5a74b10847ced73b628f4396eaab0af13b0c637fe4d021b"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-04T17:42:07.257Z"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xd055d177477bd19faa9bad5cb4f907d8ebe069b614bb708713de068293cb809d"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x63a4491dC73245E181c47BAe0ae9d6627E56dE55"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"totalBetSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"percentageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"29542732332840140000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="mi">1631233201</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"executor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E91041b9e60C7275f8296b8B0a97141e6442d49"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"37069036490382455296196784649228360571791475783443923366499720348790829992442"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isMakerBettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x68fb16ff440c65e0306cb16a9842da362480208a9a75597d45ca722769d93e6a13c9196a2654f764bfd5c0d4c83165c0a8ffa955ae9af8afd17544b0db29eaf71c"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-04T17:42:07.303Z"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xa5a30ca2251ac1431adf3d88f5734a53b78a13b2c707211eb83996bf099e3973"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x15c5cceb3d27518241355e9f148ef96b0a178f1bcdb366dea2d0e621a9cef1fb"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x63a4491dC73245E181c47BAe0ae9d6627E56dE55"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"totalBetSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"percentageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"50000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="mi">1631233201</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"executor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E91041b9e60C7275f8296b8B0a97141e6442d49"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"90344661128498016788545482097709376028896473001963632493180076229973632520043"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isMakerBettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x9b6c1e1d0cae584a3078f20d7bafd2031467a1cbce905027c6c970c13edef4357eeac625afe869417ffbecfb67b6672b765177d42fbda777f6b1a00962da2cc61c"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-04T17:42:07.270Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint returns active orders on the exchange based on a few parameters</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>POST https://app.api.sportx.bet/orders</code></p>
+<h3 id='request-payload-parameters'>Request payload parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>marketHashes</td>
+<td>false</td>
+<td>string[]</td>
+<td>Only get orders for these market hashes</td>
+</tr>
+<tr>
+<td>baseToken</td>
+<td>false</td>
+<td>string</td>
+<td>Only get orders denominated in this base token</td>
+</tr>
+<tr>
+<td>maker</td>
+<td>false</td>
+<td>string</td>
+<td>Only get orders for this market maker</td>
+</tr>
+</tbody></table>
+<h3 id='response-format'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fillAmount</td>
+<td>string</td>
+<td>How much this order has been filled in Ethereum units up to a max of <code>totalBetSize</code>. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.</td>
+</tr>
+<tr>
+<td>orderHash</td>
+<td>string</td>
+<td>A unique identifier for this order</td>
+</tr>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>The market corresponding to this order</td>
+</tr>
+<tr>
+<td>maker</td>
+<td>string</td>
+<td>The market maker for this order</td>
+</tr>
+<tr>
+<td>totalBetSize</td>
+<td>string</td>
+<td>The total size of this order in Ethereum units. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.</td>
+</tr>
+<tr>
+<td>percentageOdds</td>
+<td>string</td>
+<td>The odds that the <code>maker</code> receives in the sportx protocol format. To convert to an implied percentage odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula <code>takerOdds=1-percentageOdds/10^20</code>. See the <a href="#odds-display-on-sportx">unit conversion section</a> for more details.</td>
+</tr>
+<tr>
+<td>expiry</td>
+<td>number</td>
+<td>The time in unix seconds after which this order is no longer valid</td>
+</tr>
+<tr>
+<td>baseToken</td>
+<td>string</td>
+<td>The base token this order is denominated in</td>
+</tr>
+<tr>
+<td>executor</td>
+<td>string</td>
+<td>The address permitted to execute on this order. This is set to the sportx.bet exchange</td>
+</tr>
+<tr>
+<td>salt</td>
+<td>string</td>
+<td>A random number to differentiate identical orders</td>
+</tr>
+<tr>
+<td>isMakerBettingOutcomeOne</td>
+<td>boolean</td>
+<td><code>true</code> if the maker is betting outcome one (and hence taker is betting outcome two if filled)</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>string</td>
+<td>Signature of the maker on this order</td>
+</tr>
+</tbody></table>
+<h2 id='post-a-new-order'>Post a new order</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/new'</span> <span class="se">\</span>
+<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">--data-raw</span> <span class="s1">'{
+    "orders": [
+        {
+            "marketHash": "0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b",
+            "maker": "0x6F75bA6c90E3da79b7ACAfc0fb9cf3968aa4ee39",
+            "totalBetSize": "21600000000000000000",
+            "percentageOdds": "47846889952153115000",
+            "baseToken": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+            "expiry": "1631233201",
+            "executor": "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
+            "isMakerBettingOutcomeOne": true,
+            "signature": "0x50b00e7994b0656f78701537296444bccba2a7e4d46a84ff26c8ca48cb66774c76faa893be293412959779900232065c8236e489158070777d7a3e1a37d911811b",
+            "salt": "61882422358902283358380622686147595792242782952753619716150366288606659190035"
+        }
+    ]
+}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BigNumber</span><span class="p">,</span> <span class="nx">utils</span><span class="p">,</span> <span class="nx">providers</span><span class="p">,</span> <span class="nx">Wallet</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">order</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">marketHash</span><span class="p">:</span>
+    <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x6F75bA6c90E3da79b7ACAfc0fb9cf3968aa4ee39</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">totalBetSize</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="dl">"</span><span class="s2">21600000000000000000</span><span class="dl">"</span><span class="p">),</span>
+  <span class="na">percentageOdds</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="dl">"</span><span class="s2">47846889952153115000</span><span class="dl">"</span><span class="p">),</span>
+  <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">expiry</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">1631233201</span><span class="p">),</span>
+  <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">salt</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)),</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">orderHash</span> <span class="o">=</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">arrayify</span><span class="p">(</span>
+  <span class="nx">utils</span><span class="p">.</span><span class="nx">solidityKeccak256</span><span class="p">(</span>
+    <span class="p">[</span>
+      <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="p">[</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">marketHash</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">baseToken</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">totalBetSize</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">percentageOdds</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">expiry</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">salt</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">maker</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">executor</span><span class="p">,</span>
+      <span class="nx">order</span><span class="p">.</span><span class="nx">isMakerBettingOutcomeOne</span><span class="p">,</span>
+    <span class="p">]</span>
+  <span class="p">)</span>
+<span class="p">);</span>
+
+<span class="c1">// Example shown here with an ethers.js wallet if you're interacting with the exchange using a private key</span>
+<span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">signMessage</span><span class="p">(</span><span class="nx">orderHash</span><span class="p">);</span>
+
+<span class="c1">// Example shown here if you're interacting with the exchange using an injected web3 provider such as metamask</span>
+<span class="kd">const</span> <span class="nx">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">Web3Provider</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">ethereum</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">signer</span> <span class="o">=</span> <span class="nx">provider</span><span class="p">.</span><span class="nx">getSigner</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">signer</span><span class="p">.</span><span class="nx">signMessage</span><span class="p">(</span><span class="nx">orderHash</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">signedOrder</span> <span class="o">=</span> <span class="p">{</span> <span class="p">...</span><span class="nx">order</span><span class="p">,</span> <span class="nx">signature</span> <span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://app.api.sportx.bet/orders/new</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="na">orders</span><span class="p">:</span> <span class="p">[</span><span class="nx">signedOrder</span><span class="p">]</span> <span class="p">}),</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"0x7a9d420551c4a635849013dd908f7894766e97aee25fe656d0c5ac857e166fac"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint offers new orders on the exchange (market making)</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>POST https://app.api.sportx.bet/orders/new</code></p>
+<h3 id='request-payload-parameters-2'>Request payload parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orders</td>
+<td>true</td>
+<td>SignedNewOrder[]</td>
+<td>The new orders to post</td>
+</tr>
+</tbody></table>
+
+<p>A <code>SignedNewOrder</code> object looks like this</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>The market you wish to place this order under</td>
+</tr>
+<tr>
+<td>maker</td>
+<td>string</td>
+<td>The ethereum address offering the bet</td>
+</tr>
+<tr>
+<td>baseToken</td>
+<td>string</td>
+<td>The token this order is denominated in</td>
+</tr>
+<tr>
+<td>totalBetSize</td>
+<td>string</td>
+<td>The total bet size of the order in Ethereum units.</td>
+</tr>
+<tr>
+<td>percentageOdds</td>
+<td>string</td>
+<td>The odds <em>the maker will be receiving</em> as this order gets filled</td>
+</tr>
+<tr>
+<td>expiry</td>
+<td>number</td>
+<td>Time in UNIX seconds after which this order is no longer valid</td>
+</tr>
+<tr>
+<td>executor</td>
+<td>string</td>
+<td>The sportx.bet executor address. See the <a href="#get-metadata">metadata section</a> for where to get this address</td>
+</tr>
+<tr>
+<td>salt</td>
+<td>string</td>
+<td>A random 32 byte string to differentiate between between orders with otherwise identical parameters</td>
+</tr>
+<tr>
+<td>isMakerBettingOutcomeOne</td>
+<td>boolean</td>
+<td><code>true</code> if the maker is betting outcome one (and hence taker is betting outcome two if filled)</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>string</td>
+<td>The signature of the maker on this order payload</td>
+</tr>
+</tbody></table>
+<h3 id='response-format-2'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not</td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>The response data</td>
+</tr>
+<tr>
+<td>&gt; orders</td>
+<td>string[]</td>
+<td>The order hashes corresponding to the new orders</td>
+</tr>
+</tbody></table>
+
+<!-- ## Cancel orders
+
+```shell
+curl --location --request POST 'https://app.api.sportx.bet/orders/cancel' \
+--header 'Content-Type: application/json' \
+--data-raw '{"message":"Are you sure you want to cancel these orders?","orders":["0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"],"cancelSignature":"0x1fe66a4ed7fbd2cf9e918f5b6b73db4f46166f871f7c0f293080ee07d63592ef0d29cd0aa37dc68e25a9d483515cc3ceb4934baaed8f0114385f8c43f28677aa1c"}'
+```
+
+```javascript
+cosnt cancel
+```
+
+> The above command returns json structured like this
+
+```json
+{
+  "status": "success",
+  "data": {
+    "orderHashes": [
+      "0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"
+    ]
+  }
+}
+``` -->
+<h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
+<p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 DAI is actually stored as 100 * 10^18 DAI on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value</p>
+
+<table><thead>
+<tr>
+<th>Token</th>
+<th>Polygon Address</th>
+<th>Decimals</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>USDC</td>
+<td>0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174</td>
+<td>6</td>
+</tr>
+<tr>
+<td>DAI</td>
+<td>0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</td>
+<td>18</td>
+</tr>
+<tr>
+<td>WETH</td>
+<td>0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619</td>
+<td>18</td>
+</tr>
+</tbody></table>
+
+<p>To convert from nominal units (such as 100 DAI) to Ethereum units which are used in the API, you can do the following. </p>
+
+<p><code>ethereumAmount = nominalAmount * 10^decimals</code></p>
+
+<p>Similarly, to convert from Ethereum units to nominal units, you can do the following</p>
+
+<p><code>nominalAmount = ethereumAmount / 10^decimals</code></p>
+
+<p>where <code>decimals</code> is specified in the above table.</p>
+<h2 id='odds'>Odds</h2>
+<p>Odds are specified in an implied odds format like <code>8391352143642350000</code>. To convert to a readable implied odds, divide by <code>10^20</code>. <code>8391352143642350000</code> for example is 0.0839 or 8.39%</p>
+
+<p>To convert from implied odds to decimal odds, inverse the number. For example, 0.0839 in decimal format is <code>1/0.0839 = 11.917</code>.</p>
+<h2 id='odds-display-on-sportx'>Odds display on sportx</h2>
+<p>It&#39;s important to note how odds are displayed on sportx.bet. Recall from <a href="#get-active-orders">the order section</a> that <code>percentageOdds</code> is from the perspective of the market maker. The odds that are displayed on sportx.bet in the order books are what the taker will be receiving. Let&#39;s run through an example.</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+      </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb46e5fff6498f061e93c4f5ed501ee72d924180d6aa78cdfd4d188d3383c91d4"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x63a4491dC73245E181c47BAe0ae9d6627E56dE55"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"totalBetSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000000000000000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"percentageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70455284072443640000"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="mi">1631233201</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"executor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E91041b9e60C7275f8296b8B0a97141e6442d49"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69415402816762328320330277846098411244657139277332120954321492419616371539163"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isMakerBettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2aaea5b7c86166c0fbf2745c66aff794a23d21ac71ee143d08706700adbb59aa4c9b862286cf736acae5a74b10847ced73b628f4396eaab0af13b0c637fe4d021b"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-04T17:42:07.257Z"</span><span class="w">
+    </span><span class="p">}</span><span class="err">,</span><span class="w">
+</span></code></pre></div>
+<p>Suppose an order looks like the one on the right.</p>
+
+<p>Here the maker is betting outcome one (<code>isMakerBettingOutcomeOne = true</code>) and receiving implied odds of <code>70455284072443640000 / 10^20 = 0.704552841</code>. Therefore the taker is betting <em>outcome two</em> and receiving implied odds of <code>1 - 0.704552841 = 0.295447159</code>. This would be displayed on sportx.bet (what the user sees) under the second order book with odds of 29.5% in implied format, or <code>1 / 0.295447159 = 3.3847</code> in decimal format. </p>
 
       </div>
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="javascript">javascript</a>
           </div>
       </div>
     </div>
