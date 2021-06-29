@@ -371,10 +371,16 @@
                     <a href="#get-active-orders" class="toc-h2 toc-link" data-title="Get active orders">Get active orders</a>
                   </li>
                   <li>
+                    <a href="#enabling-betting" class="toc-h2 toc-link" data-title="Enabling betting">Enabling betting</a>
+                  </li>
+                  <li>
                     <a href="#post-a-new-order" class="toc-h2 toc-link" data-title="Post a new order">Post a new order</a>
                   </li>
                   <li>
                     <a href="#cancel-orders" class="toc-h2 toc-link" data-title="Cancel orders">Cancel orders</a>
+                  </li>
+                  <li>
+                    <a href="#filling-orders" class="toc-h2 toc-link" data-title="Filling orders">Filling orders</a>
                   </li>
               </ul>
           </li>
@@ -1911,7 +1917,7 @@
 <tr>
 <td>fillAmount</td>
 <td>string</td>
-<td>How much this order has been filled in Ethereum units up to a max of <code>totalBetSize</code>. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.</td>
+<td>How much this order has been filled in Ethereum units up to a max of <code>totalBetSize</code>. See <a href="#tokens">the token section</a> of how to convert this into nominal amounts</td>
 </tr>
 <tr>
 <td>orderHash</td>
@@ -1931,12 +1937,12 @@
 <tr>
 <td>totalBetSize</td>
 <td>string</td>
-<td>The total size of this order in Ethereum units. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.</td>
+<td>The total size of this order in Ethereum units. See the <a href="#tokens">the token section</a> section for how to convert this into nominal amounts.</td>
 </tr>
 <tr>
 <td>percentageOdds</td>
 <td>string</td>
-<td>The odds that the <code>maker</code> receives in the sportx protocol format. To convert to an implied percentage odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula <code>takerOdds=1-percentageOdds/10^20</code>. See the <a href="#bookmaker-odds">unit conversion section</a> for more details.</td>
+<td>The odds that the <code>maker</code> receives in the sportx protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula <code>takerOdds=1-percentageOdds/10^20</code>. See the <a href="#bookmaker-odds">unit conversion section</a> for more details.</td>
 </tr>
 <tr>
 <td>expiry</td>
@@ -1969,6 +1975,47 @@
 <td>Signature of the maker on this order</td>
 </tr>
 </tbody></table>
+
+<aside class="notice">
+Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker will be putting into the pot if the order was fully filled. <code>fillAmount</code> can be thought of as how many tokens the maker has already put into the pot. To compute how much space there is left from the taker's perspective, you can use the formula <code>remainingTakerSpace = (totalBetSize - fillAmount) * 10^20 / percentageOdds - (totalBetSize - fillAmount)</code>
+</aside>
+<h2 id='enabling-betting'>Enabling betting</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>See the javascript section.
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">MaxUint256</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/constants</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Contract</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">JsonRpcProvider</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/providers</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// You can get an RPC url from https://docs.matic.network/docs/develop/network-details/network/</span>
+
+<span class="kd">const</span> <span class="nx">walletAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">WALLET_ADDRESS</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">tokenAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_ADDRESS</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">tokenTransferProxyAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_TRANSFER_PROXY_ADDRESS</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">POLYGON_RPC_URL</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span><span class="nx">provider</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">tokenContract</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Contract</span><span class="p">(</span>
+  <span class="nx">tokenAddress</span><span class="p">,</span>
+  <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">constant</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">usr</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">wad</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">approve</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">outputs</span><span class="p">:</span> <span class="p">[{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span> <span class="p">}],</span>
+      <span class="na">payable</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonpayable</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">],</span>
+  <span class="nx">wallet</span>
+<span class="p">);</span>
+<span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">tokenTransferProxyAddress</span><span class="p">,</span> <span class="nx">MaxUInt256</span><span class="p">);</span>
+</code></pre></div>
+<p>To enable betting, you need to approve the <code>TokenTransferProxy</code> contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you&#39;ll need to approve the contract twice, once for each token. The address of the <code>TokenTransferProxy</code> is <code>0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e</code> and the address of each token is given in <a href="#tokens">the tokens section</a></p>
+
+<p>If you don&#39;t wish to do this programmatically, you can simply go to <code>https://sportx.bet</code>, make a test bet with the account and token you&#39;ll be using, and you will be good to go.</p>
+
+<p>If you want to do it programmatically, see the code sample on the right. Note you will need a little bit of MATIC to make this transaction (~$0.01 worth).</p>
 <h2 id='post-a-new-order'>Post a new order</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/new'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
@@ -2058,7 +2105,9 @@
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint offers new orders on the exchange (market making)</p>
+<p>This endpoint offers new orders on the exchange (market making).</p>
+
+<p>To offer bets on sportx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a>.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>POST https://app.api.sportx.bet/orders/new</code></p>
 <h3 id='request-payload-parameters-2'>Request payload parameters</h3>
@@ -2162,6 +2211,10 @@
 <td>The order hashes corresponding to the new orders</td>
 </tr>
 </tbody></table>
+
+<aside class="notice">
+Note that <code>totalBetSize</code> is from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker (you) will be putting into the pot if the order was fully filled. This is the maximum amount you will risk.
+</aside>
 <h2 id='cancel-orders'>Cancel orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/cancel'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{"message":"Are you sure you want to cancel these orders?","orders":["0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"],"cancelSignature":"0x1fe66a4ed7fbd2cf9e918f5b6b73db4f46166f871f7c0f293080ee07d63592ef0d29cd0aa37dc68e25a9d483515cc3ceb4934baaed8f0114385f8c43f28677aa1c"}'</span>
@@ -2227,7 +2280,7 @@
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint cancels existing orders on the exchange. </p>
+<p>This endpoint cancels existing orders on the exchange.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://app.api.sportx.bet/orders/cancel</code></p>
 <h3 id='request-payload-parameters-3'>Request payload parameters</h3>
@@ -2282,6 +2335,278 @@
 <td>The cancelled order hashes</td>
 </tr>
 </tbody></table>
+<h2 id='filling-orders'>Filling orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/fill'</span> <span class="se">\</span>
+<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">--data-raw</span> <span class="s1">'{"orderHashes":["0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de","0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a"],"takerAmounts":["10000000000000000000","10000000000000000000"],"taker":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","takerSig":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c","fillSalt":"69231297238279245345865414293427982207908612843136003245427437324972455931243","action":"N/A","market":"N/A","betting":"N/A","stake":"N/A","odds":"N/A","returning":"N/A"}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">bigNumberify</span><span class="p">,</span> <span class="nx">randomBytes</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/utils</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">fill</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">lodash</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">takerAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TAKER_ADDRESS</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">takerAmounts</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">];</span>
+<span class="kd">const</span> <span class="nx">fillSalt</span> <span class="o">=</span> <span class="nx">bigNumberify</span><span class="p">(</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)).</span><span class="nx">toString</span><span class="p">();</span>
+
+<span class="kd">const</span> <span class="nx">ordersToFill</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="na">fillAmount</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">orderHash</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">marketHash</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x63a4491dC73245E181c47BAe0ae9d6627E56dE55</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">totalBetSize</span><span class="p">:</span> <span class="dl">"</span><span class="s2">120000000000000000000</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">percentageOdds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">68860772772306080000</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">expiry</span><span class="p">:</span> <span class="mi">1631233201</span><span class="p">,</span>
+    <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">salt</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">64542697517744547417546237340530363903382582642857122744382059379852833736063</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="na">signature</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">0xa58255f9f7bb8a2698d66f9931a3d4ebe2e5605299a57d78b7c048f26585fdb5144b16bb930ad564f2e2819f66c8c20c2c076d8951728d8242481d58af221fc51b</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">createdAt</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2021-06-24T21:44:51.355Z</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="na">fillAmount</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">orderHash</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">marketHash</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x63a4491dC73245E181c47BAe0ae9d6627E56dE55</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">totalBetSize</span><span class="p">:</span> <span class="dl">"</span><span class="s2">120000000000000000000</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">percentageOdds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">27138321995464855000</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">expiry</span><span class="p">:</span> <span class="mi">1631233201</span><span class="p">,</span>
+    <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">salt</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">33394198022904122521460365691253625674733505262618329029186356280403872887283</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="na">signature</span><span class="p">:</span>
+      <span class="dl">"</span><span class="s2">0xb52be3279a092823bb46b3bd9a397bef2a06eda95a519718992ea88d73a4375874728cb7c5f6527b67195e44f3f0f0d29956dc05e18e775547d8f2faf3d4bd001c</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">createdAt</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2021-06-24T21:44:51.374Z</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">];</span>
+
+<span class="kd">const</span> <span class="nx">signingPayload</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chainId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">verifyingContract</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">action</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">market</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">betting</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">stake</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">odds</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">returning</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fills</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">FillObject</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="na">FillObject</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">orders</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Order[]</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">makerSigs</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes[]</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">takerAmounts</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256[]</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fillSalt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="na">Order</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">marketHash</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">baseToken</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">totalBetSize</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">percentageOdds</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">expiry</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">maker</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">executor</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">isMakerBettingOutcomeOne</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SportX</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">verifyingContract</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">market</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">betting</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">stake</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">odds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">returning</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">fills</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">makerSigs</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">order</span><span class="p">.</span><span class="nx">signature</span><span class="p">),</span>
+      <span class="na">orders</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+        <span class="na">marketHash</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">marketHash</span><span class="p">,</span>
+        <span class="na">baseToken</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">baseToken</span><span class="p">,</span>
+        <span class="na">totalBetSize</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">totalBetSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+        <span class="na">percentageOdds</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">percentageOdds</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+        <span class="na">expiry</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">expiry</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+        <span class="na">salt</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">salt</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+        <span class="na">maker</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">maker</span><span class="p">,</span>
+        <span class="na">executor</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">executor</span><span class="p">,</span>
+        <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">isMakerBettingOutcomeOne</span><span class="p">,</span>
+      <span class="p">})),</span>
+      <span class="nx">takerAmounts</span><span class="p">,</span>
+      <span class="nx">fillSalt</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="p">(</span><span class="nx">ethSigUtil</span> <span class="k">as</span> <span class="nx">any</span><span class="p">).</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">data</span><span class="p">:</span> <span class="nx">signingPayload</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">orderHashes</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">order</span><span class="p">.</span><span class="nx">orderHash</span><span class="p">),</span>
+  <span class="nx">takerAmounts</span><span class="p">,</span>
+  <span class="na">taker</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
+  <span class="na">takerSig</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
+  <span class="nx">fillSalt</span><span class="p">,</span>
+  <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">market</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">betting</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">stake</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">odds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">returning</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s2">`https://app.api.sportx.bet/orders/fill`</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
+<span class="p">});</span>
+
+</code></pre></div>
+<blockquote>
+<p>The above command returns json structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x840763ae29b7a6adfa0e315afa47be30cdebd5b793d179dc07dc8fc4f0034965"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+
+<p>To fill orders on sportx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a></p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>POST https://app.api.sportx.bet/orders/fill</code></p>
+<h3 id='request-payload-parameters-4'>Request payload parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>action</td>
+<td>true</td>
+<td>string</td>
+<td>User facing string for what action the user is taking. Can simply set to &quot;N/A&quot; when using the API</td>
+</tr>
+<tr>
+<td>betting</td>
+<td>true</td>
+<td>string</td>
+<td>User facing string for what bet the user is making. Can simply set to &quot;N/A&quot; when using the API.</td>
+</tr>
+<tr>
+<td>fillSalt</td>
+<td>true</td>
+<td>string</td>
+<td>Random 32 byte string to identify this fill. Must be the same <code>fillSalt</code> used when computing the EIP712 payload</td>
+</tr>
+<tr>
+<td>market</td>
+<td>true</td>
+<td>string</td>
+<td>User facing string for what market the user is betting on. Can simply set to &quot;N/A&quot; when using the API</td>
+</tr>
+<tr>
+<td>odds</td>
+<td>true</td>
+<td>string</td>
+<td>User facing string for the odds the user is receiving. Can simply set to &quot;N/A&quot; when using the API</td>
+</tr>
+<tr>
+<td>orderHashes</td>
+<td>true</td>
+<td>string[]</td>
+<td>Orders being filled. Must be the order hashes of the orders used in computing the EIP712 payload. Must be the same length as <code>takerAmounts</code></td>
+</tr>
+<tr>
+<td>returning</td>
+<td>true</td>
+<td>string</td>
+<td>User facing string for what the bet wil be returning. Can simply set to &quot;N/A&quot; when using the API.</td>
+</tr>
+<tr>
+<td>stake</td>
+<td>true</td>
+<td>string</td>
+<td>User facing string for how much the user is risking. Can simly set to &quot;N/A&quot; when using the API.</td>
+</tr>
+<tr>
+<td>takerAmounts</td>
+<td>true</td>
+<td>string[]</td>
+<td>How much each order is being filled, ordered by index. Must be in the same order as <code>orderHashes</code>, and the same length as <code>orderHashes</code>. It also must be the same and in the same order as the <code>takerAmounts</code> array used when computing the EIP712 payload.</td>
+</tr>
+<tr>
+<td>takerSig</td>
+<td>true</td>
+<td>string</td>
+<td>The EIP712 signature on the payload. See the example of how to compute this.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>true</td>
+<td>string</td>
+<td>A user-facing message for the eip712 signing. Can be anything.</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>true</td>
+<td>string</td>
+<td>The EIP712 signature on the cancel order payload. See the <a href="#eip712-signing">EIP712 signing section</a> for general informatin on how to compute this signature. See the example for the specific parameters required.</td>
+</tr>
+</tbody></table>
+<h3 id='response-format-4'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not</td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>The response data</td>
+</tr>
+<tr>
+<td>&gt; fillHash</td>
+<td>string</td>
+<td>A unique identifier for this fill.</td>
+</tr>
+</tbody></table>
+
+<aside class="warning">
+Note that <code>fillAmounts</code> are from *the perspective of the market maker*. <code>fillAmounts</code> can be thought of as how many tokens the maker(s) will be putting into the pot. Given an amount you as the taker want to bet, you can use the following formula to convert what value you have to use as <code>fillAmount</code> in this endpoint. <code>fillAmount = takerBetAmount * percentageOdds / (10^20 - percentageOdds)</code>
+</aside>
 <h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
 <p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 DAI is actually stored as 100 * 10^18 DAI on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value</p>
 
@@ -2309,7 +2634,7 @@
 </tr>
 </tbody></table>
 
-<p>To convert from nominal units (such as 100 DAI) to Ethereum units which are used in the API, you can do the following. </p>
+<p>To convert from nominal units (such as 100 DAI) to Ethereum units which are used in the API, you can do the following.</p>
 
 <p><code>ethereumAmount = nominalAmount * 10^decimals</code></p>
 
@@ -2323,26 +2648,26 @@
 
 <p>To convert from implied odds to decimal odds, inverse the number. For example, 0.0839 in decimal format is <code>1/0.0839 = 11.917</code>.</p>
 <h2 id='bookmaker-odds'>Bookmaker odds</h2><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-      </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb46e5fff6498f061e93c4f5ed501ee72d924180d6aa78cdfd4d188d3383c91d4"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x63a4491dC73245E181c47BAe0ae9d6627E56dE55"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"totalBetSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000000000000000"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"percentageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70455284072443640000"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="mi">1631233201</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"executor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E91041b9e60C7275f8296b8B0a97141e6442d49"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69415402816762328320330277846098411244657139277332120954321492419616371539163"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"isMakerBettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2aaea5b7c86166c0fbf2745c66aff794a23d21ac71ee143d08706700adbb59aa4c9b862286cf736acae5a74b10847ced73b628f4396eaab0af13b0c637fe4d021b"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-04T17:42:07.257Z"</span><span class="w">
-    </span><span class="p">}</span><span class="err">,</span><span class="w">
+  </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb46e5fff6498f061e93c4f5ed501ee72d924180d6aa78cdfd4d188d3383c91d4"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x63a4491dC73245E181c47BAe0ae9d6627E56dE55"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"totalBetSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10000000000000000000"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"percentageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70455284072443640000"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="mi">1631233201</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"executor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E91041b9e60C7275f8296b8B0a97141e6442d49"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"69415402816762328320330277846098411244657139277332120954321492419616371539163"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"isMakerBettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2aaea5b7c86166c0fbf2745c66aff794a23d21ac71ee143d08706700adbb59aa4c9b862286cf736acae5a74b10847ced73b628f4396eaab0af13b0c637fe4d021b"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-04T17:42:07.257Z"</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>It&#39;s important to note how odds are displayed on sportx.bet. Recall from <a href="#get-active-orders">the order section</a> that <code>percentageOdds</code> is from the perspective of the market maker. The odds that are displayed on sportx.bet in the order books are what the taker will be receiving. Let&#39;s run through an example.</p>
 
 <p>Suppose an order looks like the one on the right.</p>
 
-<p>Here the maker is betting outcome one (<code>isMakerBettingOutcomeOne = true</code>) and receiving implied odds of <code>70455284072443640000 / 10^20 = 0.704552841</code>. Therefore the taker is betting <em>outcome two</em> and receiving implied odds of <code>1 - 0.704552841 = 0.295447159</code>. This would be displayed on sportx.bet (what the user sees) under the second order book with odds of 29.5% in implied format, or <code>1 / 0.295447159 = 3.3847</code> in decimal format. </p>
+<p>Here the maker is betting outcome one (<code>isMakerBettingOutcomeOne = true</code>) and receiving implied odds of <code>70455284072443640000 / 10^20 = 0.704552841</code>. Therefore the taker is betting <em>outcome two</em> and receiving implied odds of <code>1 - 0.704552841 = 0.295447159</code>. This would be displayed on sportx.bet (what the user sees) under the second order book with odds of 29.5% in implied format, or <code>1 / 0.295447159 = 3.3847</code> in decimal format.</p>
 
 <p><img src="images/bookmaker_odds_example-b23a0dc7.png" alt="bookmaker_odds_example" /></p>
 <h1 id='eip712-signing'>EIP712 Signing</h1>
