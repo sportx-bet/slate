@@ -373,6 +373,9 @@
                   <li>
                     <a href="#post-a-new-order" class="toc-h2 toc-link" data-title="Post a new order">Post a new order</a>
                   </li>
+                  <li>
+                    <a href="#cancel-orders" class="toc-h2 toc-link" data-title="Cancel orders">Cancel orders</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -385,7 +388,18 @@
                     <a href="#odds" class="toc-h2 toc-link" data-title="Odds">Odds</a>
                   </li>
                   <li>
-                    <a href="#odds-display-on-sportx" class="toc-h2 toc-link" data-title="Odds display on sportx">Odds display on sportx</a>
+                    <a href="#bookmaker-odds" class="toc-h2 toc-link" data-title="Bookmaker odds">Bookmaker odds</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#eip712-signing" class="toc-h1 toc-link" data-title="EIP712 Signing">EIP712 Signing</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#private-key-signing-example" class="toc-h2 toc-link" data-title="Private key signing example">Private key signing example</a>
+                  </li>
+                  <li>
+                    <a href="#injected-provider-signing-example" class="toc-h2 toc-link" data-title="Injected provider signing example">Injected provider signing example</a>
                   </li>
               </ul>
           </li>
@@ -1027,7 +1041,6 @@
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
         </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xA216136Ac816FC1E816af5FffDC9E58281e14383"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6269894"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T20:17:45.990Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
@@ -1047,7 +1060,6 @@
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
         </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xA216136Ac816FC1E816af5FffDC9E58281e14383"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6269894"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T20:17:45.990Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
@@ -1067,7 +1079,6 @@
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
         </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xA216136Ac816FC1E816af5FffDC9E58281e14383"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6269902"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T22:02:19.484Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
@@ -1087,7 +1098,6 @@
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
         </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xBAbe136fcA601Cab2CfFFbc5512DDfF20fe33d2B"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6269902"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T22:02:19.484Z"</span><span class="w">
       </span><span class="p">}</span><span class="w">
@@ -1197,7 +1207,7 @@
 <tr>
 <td>stake</td>
 <td>string</td>
-<td>Exact token amount that was staked for the bet.</td>
+<td>Exact token amount that was staked for the bet. To convert into a readable token amount, see <a href="#tokens">the token conversion section</a></td>
 </tr>
 <tr>
 <td>odds</td>
@@ -1260,10 +1270,6 @@
 <td>ISO formatted date string of when the trade was settled</td>
 </tr>
 </tbody></table>
-
-<aside class="notice">
-To convert the <code>stake</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC.
-</aside>
 <h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/trades/consolidated'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json''
 </span></code></pre></div>
@@ -1774,12 +1780,12 @@ To convert the <code>stake</code> into a readable token amount, divide by 10^18 
 <tr>
 <td>makerOrderMinimums</td>
 <td>any</td>
-<td>A mapping from token address to a real token amount indicating the minimum maker order size.</td>
+<td>A mapping from token address to a real token amount indicating the minimum maker order size. To convert into a readable amount, see <a href="#tokens">the token conversion section</a></td>
 </tr>
 <tr>
 <td>takerMinimums</td>
 <td>any</td>
-<td>A mapping from token address to a real token amount indicating the minimum taker order size</td>
+<td>A mapping from token address to a real token amount indicating the minimum taker order size. To convert into a readable amount, see <a href="#tokens">the token conversion section</a></td>
 </tr>
 <tr>
 <td>addresses</td>
@@ -1807,14 +1813,6 @@ To convert the <code>stake</code> into a readable token amount, divide by 10^18 
 <td>All time total volume on the exchange</td>
 </tr>
 </tbody></table>
-
-<aside class="notice">
-To convert the <code>makerOrderMinimums</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC. For USDC divide by 10^6.
-</aside>
-
-<aside class="notice">
-To convert the <code>takerMinimums</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC. For USDC divide by 10^6.
-</aside>
 <h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders'</span>
 </code></pre></div>
 <blockquote>
@@ -1938,7 +1936,7 @@ To convert the <code>takerMinimums</code> into a readable token amount, divide b
 <tr>
 <td>percentageOdds</td>
 <td>string</td>
-<td>The odds that the <code>maker</code> receives in the sportx protocol format. To convert to an implied percentage odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula <code>takerOdds=1-percentageOdds/10^20</code>. See the <a href="#odds-display-on-sportx">unit conversion section</a> for more details.</td>
+<td>The odds that the <code>maker</code> receives in the sportx protocol format. To convert to an implied percentage odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula <code>takerOdds=1-percentageOdds/10^20</code>. See the <a href="#bookmaker-odds">unit conversion section</a> for more details.</td>
 </tr>
 <tr>
 <td>expiry</td>
@@ -2164,31 +2162,126 @@ To convert the <code>takerMinimums</code> into a readable token amount, divide b
 <td>The order hashes corresponding to the new orders</td>
 </tr>
 </tbody></table>
+<h2 id='cancel-orders'>Cancel orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/cancel'</span> <span class="se">\</span>
+<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">--data-raw</span> <span class="s1">'{"message":"Are you sure you want to cancel these orders?","orders":["0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"],"cancelSignature":"0x1fe66a4ed7fbd2cf9e918f5b6b73db4f46166f871f7c0f293080ee07d63592ef0d29cd0aa37dc68e25a9d483515cc3ceb4934baaed8f0114385f8c43f28677aa1c"}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
 
-<!-- ## Cancel orders
+<span class="c1">// Example is shown using a private key</span>
 
-```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders/cancel' \
---header 'Content-Type: application/json' \
---data-raw '{"message":"Are you sure you want to cancel these orders?","orders":["0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"],"cancelSignature":"0x1fe66a4ed7fbd2cf9e918f5b6b73db4f46166f871f7c0f293080ee07d63592ef0d29cd0aa37dc68e25a9d483515cc3ceb4934baaed8f0114385f8c43f28677aa1c"}'
-```
+<span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">ordersToCancel</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="dl">"</span><span class="s2">0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1</span><span class="dl">"</span><span class="p">,</span>
+<span class="p">];</span>
 
-```javascript
-cosnt cancel
-```
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chainId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">orders</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string[]</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">],</span>
+  <span class="p">},</span>
+  <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">CancelOrderSportX</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Are you sure you want to cancel these orders</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">orders</span><span class="p">:</span> <span class="nx">ordersToCancel</span><span class="p">,</span>
+  <span class="p">},</span>
+<span class="p">};</span>
 
-> The above command returns json structured like this
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
+<span class="p">});</span>
 
-```json
-{
-  "status": "success",
-  "data": {
-    "orderHashes": [
-      "0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"
-    ]
-  }
-}
-``` -->
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">orders</span><span class="p">:</span> <span class="nx">ordersToCancel</span><span class="p">,</span>
+  <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Are you sure you want to cancel these orders</span><span class="dl">"</span><span class="p">,</span>
+  <span class="nx">signature</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://app.api.sportx.bet/orders/cancel</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">),</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns json structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"orderHashes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint cancels existing orders on the exchange. </p>
+<h3 id='http-request-3'>HTTP Request</h3>
+<p><code>POST https://app.api.sportx.bet/orders/cancel</code></p>
+<h3 id='request-payload-parameters-3'>Request payload parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orders</td>
+<td>true</td>
+<td>string[]</td>
+<td>The order hashes to cancel</td>
+</tr>
+<tr>
+<td>message</td>
+<td>true</td>
+<td>string</td>
+<td>A user-facing message for the eip712 signing. Can be anything.</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>true</td>
+<td>string</td>
+<td>The EIP712 signature on the cancel order payload. See the <a href="#eip712-signing">EIP712 signing section</a> for more details on how to compute this signature.</td>
+</tr>
+</tbody></table>
+<h3 id='response-format-3'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not</td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>The response data</td>
+</tr>
+<tr>
+<td>&gt; orderHashes</td>
+<td>string[]</td>
+<td>The cancelled order hashes</td>
+</tr>
+</tbody></table>
 <h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
 <p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 DAI is actually stored as 100 * 10^18 DAI on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value</p>
 
@@ -2229,9 +2322,7 @@ cosnt cancel
 <p>Odds are specified in an implied odds format like <code>8391352143642350000</code>. To convert to a readable implied odds, divide by <code>10^20</code>. <code>8391352143642350000</code> for example is 0.0839 or 8.39%</p>
 
 <p>To convert from implied odds to decimal odds, inverse the number. For example, 0.0839 in decimal format is <code>1/0.0839 = 11.917</code>.</p>
-<h2 id='odds-display-on-sportx'>Odds display on sportx</h2>
-<p>It&#39;s important to note how odds are displayed on sportx.bet. Recall from <a href="#get-active-orders">the order section</a> that <code>percentageOdds</code> is from the perspective of the market maker. The odds that are displayed on sportx.bet in the order books are what the taker will be receiving. Let&#39;s run through an example.</p>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h2 id='bookmaker-odds'>Bookmaker odds</h2><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
       </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb46e5fff6498f061e93c4f5ed501ee72d924180d6aa78cdfd4d188d3383c91d4"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b"</span><span class="p">,</span><span class="w">
@@ -2247,9 +2338,83 @@ cosnt cancel
       </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-06-04T17:42:07.257Z"</span><span class="w">
     </span><span class="p">}</span><span class="err">,</span><span class="w">
 </span></code></pre></div>
+<p>It&#39;s important to note how odds are displayed on sportx.bet. Recall from <a href="#get-active-orders">the order section</a> that <code>percentageOdds</code> is from the perspective of the market maker. The odds that are displayed on sportx.bet in the order books are what the taker will be receiving. Let&#39;s run through an example.</p>
+
 <p>Suppose an order looks like the one on the right.</p>
 
 <p>Here the maker is betting outcome one (<code>isMakerBettingOutcomeOne = true</code>) and receiving implied odds of <code>70455284072443640000 / 10^20 = 0.704552841</code>. Therefore the taker is betting <em>outcome two</em> and receiving implied odds of <code>1 - 0.704552841 = 0.295447159</code>. This would be displayed on sportx.bet (what the user sees) under the second order book with odds of 29.5% in implied format, or <code>1 / 0.295447159 = 3.3847</code> in decimal format. </p>
+
+<p><img src="images/bookmaker_odds_example-b23a0dc7.png" alt="bookmaker_odds_example" /></p>
+<h1 id='eip712-signing'>EIP712 Signing</h1>
+<p>For certain operations with the API, we require you to sign data using the <a href="https://eips.ethereum.org/EIPS/eip-712">EIP712 specification</a>. We provide two examples to sign data in the EIP712 fashion in JavaScript if you&#39;re using an injected provider (such as MetaMask or another wallet) or a private key.</p>
+
+<p>As of now we have not tested other libraries in other languages that support EIP712.</p>
+<h2 id='private-key-signing-example'>Private key signing example</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>See the javascript section
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span>
+<span class="c1">// Assuming process.env.PRIVATE_KEY is "0x"-prefixed</span>
+<span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chainId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">}</span>
+      <span class="p">],</span>
+      <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">orders</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string[]</span><span class="dl">"</span> <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">CancelOrderSportX</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Are you sure you want to cancel these orders</span><span class="dl">"</span>
+        <span class="na">orders</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">0x550128e997978495eeae503c13e2e30243d747e969c65e1a0b565c609e097506</span><span class="dl">"</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span>
+    <span class="nx">bufferPrivateKey</span><span class="p">,</span>
+    <span class="p">{</span> <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span> <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div>
+<p>Here we use a private key directly which is the most straightforward way to sign data and does not require access to an authenticated node. It&#39;s also the fastest.</p>
+<h2 id='injected-provider-signing-example'>Injected provider signing example</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>See the javascript section
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">providers</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">walletAddress</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">0xa1e32a027271f7d3d5c629b1c87289ccf9611533</span><span class="dl">"</span>
+<span class="kd">const</span> <span class="nx">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">Web3Provider</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">ethereum</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chainId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">}</span>
+      <span class="p">],</span>
+      <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">orders</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string[]</span><span class="dl">"</span> <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">CancelOrderSportX</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Are you sure you want to cancel these orders</span><span class="dl">"</span>
+        <span class="na">orders</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">0x550128e997978495eeae503c13e2e30243d747e969c65e1a0b565c609e097506</span><span class="dl">"</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">provider</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">eth_signTypedData_v4</span><span class="dl">"</span><span class="p">,</span> <span class="p">[</span><span class="nx">walletAddress</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)])</span>
+</code></pre></div>
+<p>Here we use <code>ethers.js</code> and show an example with MetaMask but provided the injected provider has a <code>send()</code> function and supports the <code>eth_signTypedData</code> JSON-RPC method, it will work. Note that in some wallets, such as metamask, <code>eth_signTypedData_v4</code> is the most up to date version of <code>eth_signTypedData</code>.</p>
 
       </div>
       <div class="dark-box">
