@@ -409,6 +409,12 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#contract-addresses" class="toc-h1 toc-link" data-title="Contract Addresses">Contract Addresses</a>
+          </li>
+          <li>
+            <a href="#fees" class="toc-h1 toc-link" data-title="Fees">Fees</a>
+          </li>
       </ul>
     </div>
     <div class="page-wrapper">
@@ -521,7 +527,7 @@
 <td>If set, it will only include markets for a particular sportXeventId</td>
 </tr>
 <tr>
-<td>leagueID</td>
+<td>leagueId</td>
 <td>false</td>
 <td>undefined</td>
 <td>If set, it will only include markets for a particular league ID</td>
@@ -621,7 +627,7 @@
 <tr>
 <td>line</td>
 <td>number?</td>
-<td>The line of the market (only applicable to markets with a line, for example SPREAD)</td>
+<td>The line of the market (only applicable to markets with a line, for example SPREAD or OVER_UNDER)</td>
 </tr>
 <tr>
 <td>sportXeventId</td>
@@ -1645,7 +1651,7 @@
 <td>Extra data for this match</td>
 </tr>
 <tr>
-<td>leagueID</td>
+<td>leagueId</td>
 <td>number</td>
 <td>The league ID for this match</td>
 </tr>
@@ -1906,6 +1912,8 @@
 <td>Only get orders for this market maker</td>
 </tr>
 </tbody></table>
+
+<p>Note that one of <code>marketHashes</code> or <code>maker</code> is required.</p>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
@@ -2338,149 +2346,273 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <h2 id='filling-orders'>Filling orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/fill'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{"orderHashes":["0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de","0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a"],"takerAmounts":["10000000000000000000","10000000000000000000"],"taker":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","takerSig":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c","fillSalt":"69231297238279245345865414293427982207908612843136003245427437324972455931243","action":"N/A","market":"N/A","betting":"N/A","stake":"N/A","odds":"N/A","returning":"N/A"}'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">bigNumberify</span><span class="p">,</span> <span class="nx">randomBytes</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/utils</span><span class="dl">"</span><span class="p">;</span>
-<span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
-<span class="k">import</span> <span class="p">{</span> <span class="nx">fill</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">lodash</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span>
+  <span class="nx">BigNumber</span><span class="p">,</span>
+  <span class="nx">constants</span><span class="p">,</span>
+  <span class="nx">Contract</span><span class="p">,</span>
+  <span class="nx">providers</span><span class="p">,</span>
+  <span class="nx">utils</span><span class="p">,</span>
+  <span class="nx">Wallet</span><span class="p">,</span>
+<span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">randomBytes</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/lib/utils</span><span class="dl">"</span><span class="p">;</span>
 
-<span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
-<span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">const</span> <span class="nx">takerAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TAKER_ADDRESS</span><span class="p">;</span>
-<span class="kd">const</span> <span class="nx">takerAmounts</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">];</span>
-<span class="kd">const</span> <span class="nx">fillSalt</span> <span class="o">=</span> <span class="nx">bigNumberify</span><span class="p">(</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)).</span><span class="nx">toString</span><span class="p">();</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">fillOrder</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">takerAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TAKER_ADDRESS</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">tokenAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_ADDRESS</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">tokenTransferProxyAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_TRANSFER_PROXY_ADDRESS</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span>
+    <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PROVIDER_URL</span><span class="p">)</span>
+  <span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">takerAmounts</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">];</span>
+  <span class="kd">const</span> <span class="nx">fillSalt</span> <span class="o">=</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)).</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">approvalAmount</span> <span class="o">=</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">MaxUint256</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">tokenContract</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Contract</span><span class="p">(</span>
+    <span class="nx">tokenAddress</span><span class="p">,</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">constant</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">usr</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">wad</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">approve</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">outputs</span><span class="p">:</span> <span class="p">[{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span> <span class="p">}],</span>
+        <span class="na">payable</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonpayable</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">user</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">getNonce</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">outputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonce</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">view</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">owner</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonces</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">outputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">view</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">constant</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="nx">wallet</span>
+  <span class="p">);</span>
 
-<span class="kd">const</span> <span class="nx">ordersToFill</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span>
-    <span class="na">fillAmount</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">orderHash</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">marketHash</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x63a4491dC73245E181c47BAe0ae9d6627E56dE55</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">totalBetSize</span><span class="p">:</span> <span class="dl">"</span><span class="s2">120000000000000000000</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">percentageOdds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">68860772772306080000</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">expiry</span><span class="p">:</span> <span class="mi">1631233201</span><span class="p">,</span>
-    <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">salt</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">64542697517744547417546237340530363903382582642857122744382059379852833736063</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="na">signature</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">0xa58255f9f7bb8a2698d66f9931a3d4ebe2e5605299a57d78b7c048f26585fdb5144b16bb930ad564f2e2819f66c8c20c2c076d8951728d8242481d58af221fc51b</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">createdAt</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2021-06-24T21:44:51.355Z</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">},</span>
-  <span class="p">{</span>
-    <span class="na">fillAmount</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">orderHash</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">marketHash</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x63a4491dC73245E181c47BAe0ae9d6627E56dE55</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">totalBetSize</span><span class="p">:</span> <span class="dl">"</span><span class="s2">120000000000000000000</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">percentageOdds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">27138321995464855000</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">expiry</span><span class="p">:</span> <span class="mi">1631233201</span><span class="p">,</span>
-    <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">salt</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">33394198022904122521460365691253625674733505262618329029186356280403872887283</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="na">signature</span><span class="p">:</span>
-      <span class="dl">"</span><span class="s2">0xb52be3279a092823bb46b3bd9a397bef2a06eda95a519718992ea88d73a4375874728cb7c5f6527b67195e44f3f0f0d29956dc05e18e775547d8f2faf3d4bd001c</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">createdAt</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2021-06-24T21:44:51.374Z</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">},</span>
-<span class="p">];</span>
+  <span class="kd">let</span> <span class="nx">nonce</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span>
+    <span class="nx">tokenAddress</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174</span><span class="dl">"</span> <span class="c1">// USDC has a non-standard get nonce method</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">nonce</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">nonces</span><span class="p">(</span><span class="nx">takerAddress</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">nonce</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">getNonce</span><span class="p">(</span><span class="nx">takerAddress</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kd">const</span> <span class="nx">tokenName</span><span class="p">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">name</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">abiEncodedFunctionSig</span> <span class="o">=</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="kr">interface</span><span class="p">.</span><span class="nx">encodeFunctionData</span><span class="p">(</span>
+    <span class="dl">"</span><span class="s2">approve</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">[</span><span class="nx">tokenTransferProxyAddress</span><span class="p">,</span> <span class="nx">approvalAmount</span><span class="p">]</span>
+  <span class="p">);</span>
 
-<span class="kd">const</span> <span class="nx">signingPayload</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
-    <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chainId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">verifyingContract</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
-    <span class="p">],</span>
-    <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">action</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">market</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">betting</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">stake</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">odds</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">returning</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fills</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">FillObject</span><span class="dl">"</span> <span class="p">},</span>
-    <span class="p">],</span>
-    <span class="na">FillObject</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">orders</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Order[]</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">makerSigs</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes[]</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">takerAmounts</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256[]</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fillSalt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-    <span class="p">],</span>
-    <span class="na">Order</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">marketHash</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">baseToken</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">totalBetSize</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">percentageOdds</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">expiry</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">maker</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">executor</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">isMakerBettingOutcomeOne</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span> <span class="p">},</span>
-    <span class="p">],</span>
-  <span class="p">},</span>
-  <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
-    <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SportX</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="na">verifyingContract</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d</span><span class="dl">"</span><span class="p">,</span>
-  <span class="p">},</span>
-  <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">ordersToFill</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">fillAmount</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">orderHash</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">marketHash</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x63a4491dC73245E181c47BAe0ae9d6627E56dE55</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">totalBetSize</span><span class="p">:</span> <span class="dl">"</span><span class="s2">120000000000000000000</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">percentageOdds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">68860772772306080000</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">expiry</span><span class="p">:</span> <span class="mi">1631233201</span><span class="p">,</span>
+      <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">salt</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">64542697517744547417546237340530363903382582642857122744382059379852833736063</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="na">signature</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">0xa58255f9f7bb8a2698d66f9931a3d4ebe2e5605299a57d78b7c048f26585fdb5144b16bb930ad564f2e2819f66c8c20c2c076d8951728d8242481d58af221fc51b</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">createdAt</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2021-06-24T21:44:51.355Z</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="na">fillAmount</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">orderHash</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">marketHash</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x63a4491dC73245E181c47BAe0ae9d6627E56dE55</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">totalBetSize</span><span class="p">:</span> <span class="dl">"</span><span class="s2">120000000000000000000</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">percentageOdds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">27138321995464855000</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">expiry</span><span class="p">:</span> <span class="mi">1631233201</span><span class="p">,</span>
+      <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">salt</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">33394198022904122521460365691253625674733505262618329029186356280403872887283</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="na">signature</span><span class="p">:</span>
+        <span class="dl">"</span><span class="s2">0xb52be3279a092823bb46b3bd9a397bef2a06eda95a519718992ea88d73a4375874728cb7c5f6527b67195e44f3f0f0d29956dc05e18e775547d8f2faf3d4bd001c</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">createdAt</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2021-06-24T21:44:51.374Z</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">];</span>
+
+  <span class="kd">const</span> <span class="nx">signingPayload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chainId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">verifyingContract</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+      <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">action</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">market</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">betting</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">stake</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">odds</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">returning</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fills</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">FillObject</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+      <span class="na">FillObject</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">orders</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Order[]</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">makerSigs</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes[]</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">takerAmounts</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256[]</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fillSalt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+      <span class="na">Order</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">marketHash</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">baseToken</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">totalBetSize</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">percentageOdds</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">expiry</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">maker</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">executor</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">isMakerBettingOutcomeOne</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+    <span class="p">},</span>
+    <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SportX</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="na">verifyingContract</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">market</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">betting</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">stake</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">odds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">returning</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">fills</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">makerSigs</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">order</span><span class="p">.</span><span class="nx">signature</span><span class="p">),</span>
+        <span class="na">orders</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
+          <span class="na">marketHash</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">marketHash</span><span class="p">,</span>
+          <span class="na">baseToken</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">baseToken</span><span class="p">,</span>
+          <span class="na">totalBetSize</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">totalBetSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+          <span class="na">percentageOdds</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">percentageOdds</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+          <span class="na">expiry</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">expiry</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+          <span class="na">salt</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">salt</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+          <span class="na">maker</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">maker</span><span class="p">,</span>
+          <span class="na">executor</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">executor</span><span class="p">,</span>
+          <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">isMakerBettingOutcomeOne</span><span class="p">,</span>
+        <span class="p">})),</span>
+        <span class="nx">takerAmounts</span><span class="p">,</span>
+        <span class="nx">fillSalt</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">},</span>
+  <span class="p">};</span>
+
+  <span class="kd">const</span> <span class="nx">approveProxySigningPayload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">verifyingContract</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+      <span class="na">MetaTransaction</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonce</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">functionSignature</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+    <span class="p">},</span>
+    <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="nx">tokenName</span><span class="p">,</span>
+      <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">salt</span><span class="p">:</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">hexZeroPad</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hexlify</span><span class="p">(</span><span class="mi">137</span><span class="p">),</span> <span class="mi">32</span><span class="p">),</span>
+      <span class="na">verifyingContract</span><span class="p">:</span> <span class="nx">tokenAddress</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nx">nonce</span><span class="p">,</span>
+      <span class="na">from</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
+      <span class="na">functionSignature</span><span class="p">:</span> <span class="nx">abiEncodedFunctionSig</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">MetaTransaction</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">};</span>
+
+  <span class="kd">const</span> <span class="nx">approveProxySignature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">data</span><span class="p">:</span> <span class="nx">approveProxySigningPayload</span><span class="p">,</span>
+  <span class="p">});</span>
+
+  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">data</span><span class="p">:</span> <span class="nx">signingPayload</span><span class="p">,</span>
+  <span class="p">});</span>
+
+  <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">orderHashes</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">order</span><span class="p">.</span><span class="nx">orderHash</span><span class="p">),</span>
+    <span class="nx">takerAmounts</span><span class="p">,</span>
+    <span class="na">taker</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
+    <span class="na">takerSig</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
+    <span class="nx">fillSalt</span><span class="p">,</span>
     <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">market</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">betting</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">stake</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">odds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">returning</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">fills</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">makerSigs</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">order</span><span class="p">.</span><span class="nx">signature</span><span class="p">),</span>
-      <span class="na">orders</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span>
-        <span class="na">marketHash</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">marketHash</span><span class="p">,</span>
-        <span class="na">baseToken</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">baseToken</span><span class="p">,</span>
-        <span class="na">totalBetSize</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">totalBetSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
-        <span class="na">percentageOdds</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">percentageOdds</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
-        <span class="na">expiry</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">expiry</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
-        <span class="na">salt</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">salt</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
-        <span class="na">maker</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">maker</span><span class="p">,</span>
-        <span class="na">executor</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">executor</span><span class="p">,</span>
-        <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="nx">order</span><span class="p">.</span><span class="nx">isMakerBettingOutcomeOne</span><span class="p">,</span>
-      <span class="p">})),</span>
-      <span class="nx">takerAmounts</span><span class="p">,</span>
-      <span class="nx">fillSalt</span><span class="p">,</span>
+    <span class="na">approveProxyPayload</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">owner</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
+      <span class="na">spender</span><span class="p">:</span> <span class="nx">tokenTransferProxyAddress</span><span class="p">,</span>
+      <span class="nx">tokenAddress</span><span class="p">,</span>
+      <span class="na">amount</span><span class="p">:</span> <span class="nx">approvalAmount</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+      <span class="na">signature</span><span class="p">:</span> <span class="nx">approveProxySignature</span><span class="p">,</span>
     <span class="p">},</span>
-  <span class="p">},</span>
-<span class="p">};</span>
+  <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="p">(</span><span class="nx">ethSigUtil</span> <span class="k">as</span> <span class="nx">any</span><span class="p">).</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
-  <span class="na">data</span><span class="p">:</span> <span class="nx">signingPayload</span><span class="p">,</span>
-<span class="p">});</span>
-
-<span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">orderHashes</span><span class="p">:</span> <span class="nx">ordersToFill</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">order</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">order</span><span class="p">.</span><span class="nx">orderHash</span><span class="p">),</span>
-  <span class="nx">takerAmounts</span><span class="p">,</span>
-  <span class="na">taker</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
-  <span class="na">takerSig</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
-  <span class="nx">fillSalt</span><span class="p">,</span>
-  <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">market</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">betting</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">stake</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">odds</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">returning</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
-<span class="p">};</span>
-
-<span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s2">`https://app.api.sportx.bet/orders/fill`</span><span class="p">,</span> <span class="p">{</span>
-  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
-  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
-<span class="p">});</span>
-
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s2">`https://app.api.sportx.bet/orders/fill`</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
+  <span class="p">});</span>
+<span class="p">}</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns json structured like this</p>
@@ -2492,7 +2624,9 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+<p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.</p>
+
+<p>Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
 
 <p>To fill orders on sportx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a></p>
 <h3 id='http-request-4'>HTTP Request</h3>
@@ -2576,7 +2710,55 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <td>signature</td>
 <td>true</td>
 <td>string</td>
-<td>The EIP712 signature on the cancel order payload. See the <a href="#eip712-signing">EIP712 signing section</a> for general informatin on how to compute this signature. See the example for the specific parameters required.</td>
+<td>The EIP712 signature on the cancel order payload. See the <a href="#eip712-signing">EIP712 signing section</a> for general information on how to compute this signature. See the example for the specific parameters required.</td>
+</tr>
+<tr>
+<td>approveProxyPayload</td>
+<td>false</td>
+<td><code>ApproveSpenderPayload</code></td>
+<td>Extra object required if you wish to atomically <code>ERC20.approve()</code> prior to the bet. This can be useful from a UX point of view if you don&#39;t want the user to have to wait until the approval is mined before the bet can be submitted</td>
+</tr>
+</tbody></table>
+
+<p>where an <code>ApproveSpenderPayload</code> looks like</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>owner</td>
+<td>true</td>
+<td>string</td>
+<td>Address of the bettor</td>
+</tr>
+<tr>
+<td>spender</td>
+<td>true</td>
+<td>string</td>
+<td>Address of the contract permitted to spend tokens on behalf of the bettor to bet. See the <code>TokenTransferProxy</code> address in the <a href="#contract-addresses">contract-addresses</a> section for this address</td>
+</tr>
+<tr>
+<td>tokenAddress</td>
+<td>true</td>
+<td>string</td>
+<td>Address of the token being used to bet. Must be the same as the token referenced in the orders being filled</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>true</td>
+<td>string</td>
+<td>Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors&#39;s perspective, i.e., how many tokens are leaving the bettor&#39;s wallet</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>true</td>
+<td>string</td>
+<td>The EIP712 signature of the this payload.</td>
 </tr>
 </tbody></table>
 <h3 id='response-format-4'>Response format</h3>
@@ -2606,6 +2788,10 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 
 <aside class="warning">
 Note that <code>fillAmounts</code> are from *the perspective of the market maker*. <code>fillAmounts</code> can be thought of as how many tokens the maker(s) will be putting into the pot. Given an amount you as the taker want to bet, you can use the following formula to convert what value you have to use as <code>fillAmount</code> in this endpoint. <code>fillAmount = takerBetAmount * percentageOdds / (10^20 - percentageOdds)</code>
+</aside>
+
+<aside class="notice">
+To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
 <h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
 <p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 DAI is actually stored as 100 * 10^18 DAI on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value</p>
@@ -2740,6 +2926,28 @@ Note that <code>fillAmounts</code> are from *the perspective of the market maker
 <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">provider</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="dl">"</span><span class="s2">eth_signTypedData_v4</span><span class="dl">"</span><span class="p">,</span> <span class="p">[</span><span class="nx">walletAddress</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)])</span>
 </code></pre></div>
 <p>Here we use <code>ethers.js</code> and show an example with MetaMask but provided the injected provider has a <code>send()</code> function and supports the <code>eth_signTypedData</code> JSON-RPC method, it will work. Note that in some wallets, such as metamask, <code>eth_signTypedData_v4</code> is the most up to date version of <code>eth_signTypedData</code>.</p>
+<h1 id='contract-addresses'>Contract Addresses</h1>
+<p>Below are special contract addresses required for interacting with the API</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Contract Address</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>TokenTransferProxy</td>
+<td>0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e</td>
+</tr>
+<tr>
+<td>EIP712FillHasher</td>
+<td>0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d</td>
+</tr>
+</tbody></table>
+<h1 id='fees'>Fees</h1>
+<p>Fees are set as 4% on the profits of your bet. For example, if you bet 100 DAI to win 200 DAI and you win, your profit is <code>200 - 100 = 100 DAI</code> and the fees paid is <code>100 * 0.04 = 4 DAI</code>. This fee can be reduced by staking SX. See the <a href="https://sportx.bet/token/discount">fee discount page</a> for details.</p>
+
+<p>There are no maker or taker fees.</p>
 
       </div>
       <div class="dark-box">
