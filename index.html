@@ -415,7 +415,36 @@
           <li>
             <a href="#fees" class="toc-h1 toc-link" data-title="Fees">Fees</a>
           </li>
+          <li>
+            <a href="#websocket-api" class="toc-h1 toc-link" data-title="Websocket API">Websocket API</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#initialization" class="toc-h2 toc-link" data-title="Initialization">Initialization</a>
+                  </li>
+                  <li>
+                    <a href="#market-updates" class="toc-h2 toc-link" data-title="Market updates">Market updates</a>
+                  </li>
+                  <li>
+                    <a href="#line-changes" class="toc-h2 toc-link" data-title="Line changes">Line changes</a>
+                  </li>
+                  <li>
+                    <a href="#live-score-updates" class="toc-h2 toc-link" data-title="Live score updates">Live score updates</a>
+                  </li>
+                  <li>
+                    <a href="#trade-updates" class="toc-h2 toc-link" data-title="Trade updates">Trade updates</a>
+                  </li>
+                  <li>
+                    <a href="#active-order-updates" class="toc-h2 toc-link" data-title="Active order updates">Active order updates</a>
+                  </li>
+                  <li>
+                    <a href="#order-book-updates" class="toc-h2 toc-link" data-title="Order book updates">Order book updates</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
+        <ul class="toc-footer">
+            <li><a href='https://sportx.bet'>Visit sportx.bet</a></li>
+        </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
@@ -762,7 +791,51 @@
 </tr>
 </tbody></table>
 
-<p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted</p>
+<p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted. Note that there are a few additional fields if you are querying a market that has been settled/reported</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>reportedDate</td>
+<td>number</td>
+<td>Time in unix seconds of when the market was reported</td>
+</tr>
+<tr>
+<td>outcome</td>
+<td>number</td>
+<td>The outcome of the market. Can be one of 0 1 or 2. 0 means the market was voided and stakes were returned to bettors. 1 means the outcome labeled <code>outcomeOneName</code> was the outcome. 2 means the outcome labeled <code>outcomeTwoName</code> was the outcome.</td>
+</tr>
+<tr>
+<td>teamOneScore</td>
+<td>number</td>
+<td>Final score of team one</td>
+</tr>
+<tr>
+<td>teamTwoScore</td>
+<td>number</td>
+<td>Final score of team two</td>
+</tr>
+<tr>
+<td>teamOneMeta</td>
+<td>string</td>
+<td>Extra metadata for team one</td>
+</tr>
+<tr>
+<td>teamTwoMeta</td>
+<td>string</td>
+<td>Extra metadata for team two</td>
+</tr>
+<tr>
+<td>marketMeta</td>
+<td>string</td>
+<td>Extra metadata for the market overall</td>
+</tr>
+</tbody></table>
 <h2 id='popular-markets'>Popular markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/popular'</span>
 </code></pre></div>
 <blockquote>
@@ -2948,6 +3021,486 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <p>Fees are set as 4% on the profits of your bet. For example, if you bet 100 DAI to win 200 DAI and you win, your profit is <code>200 - 100 = 100 DAI</code> and the fees paid is <code>100 * 0.04 = 4 DAI</code>. This fee can be reduced by staking SX. See the <a href="https://sportx.bet/token/discount">fee discount page</a> for details.</p>
 
 <p>There are no maker or taker fees.</p>
+<h1 id='websocket-api'>Websocket API</h1>
+<p>You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.</p>
+<h2 id='initialization'>Initialization</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">ably</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ably</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">realtime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
+    <span class="na">authUrl</span><span class="p">:</span> <span class="s2">`https://app.api.sportx.bet/user/token`</span><span class="p">,</span>
+  <span class="p">});</span>
+  <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="k">void</span><span class="o">&gt;</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">realtime</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">resolve</span><span class="p">();</span>
+    <span class="p">});</span>
+    <span class="c1">// 10s timeout to connect</span>
+    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">reject</span><span class="p">(),</span> <span class="mi">10000</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See <a href="#https://ably.com/documentation/quick-start-guide">this link</a> for a basic overview of the API in other languages.</p>
+
+<aside class="warning">
+You only need one instance of the <code>ably</code> object to connect to the API. Connections to multiple channels are multiplexed though the single network connection. If you create too many individual connections, you will be forcefully unsubscribed from all channels and disconnected.
+</aside>
+
+<p>All the examples following assume you have a <code>realtime</code> object in scope following the initialization code to the right.</p>
+<h2 id='market-updates'>Market updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`markets`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1625674200</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"group1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MLB"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"homeTeamFirst"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">171</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"leagueLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MLB"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x384c6d8e17c9b5522a17f7bb049ede7d3dd9dd1311232fe854e7f9f4708dfc4c"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"outcomeOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Over 7.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"outcomeTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Under 7.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_GAME_OR_EVEN"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Baseball"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7186379"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa Bay Rays"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cleveland Indians"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OVER_UNDER"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to all changes in markets on sportx.bet. You will get updates when</p>
+
+<ul>
+<li>A new market is added</li>
+<li>A market is removed (set to <code>INACTIVE</code>)</li>
+<li>A market&#39;s fields have changed (for example, game time has changed or the market has settled)</li>
+</ul>
+<h3 id='channel-name-format'>Channel name format</h3>
+<p><code>markets</code></p>
+<h3 id='message-payload-format'>Message payload format</h3>
+<p>See <a href="#get-specific-markets">the markets section</a> for the format of the message</p>
+<h2 id='line-changes'>Line changes</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`main_line`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x38cceead7bda65c18574a34994ebd8af154725d08aa735dcbf26247a7dcc67bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"marketType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OVER_UNDER"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7178624"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to all line changes. Messages are sent for particular combinations of event IDs and market types. Note that only market types with lines will have updates sent. For example,
+<code>MONEY_LINE</code> markets will not have main line changes.</p>
+<h3 id='channel-name-format-2'>Channel name format</h3>
+<p><code>main_line</code></p>
+<h3 id='message-payload-format-2'>Message payload format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>The market which is now the main line for this event ID</td>
+</tr>
+<tr>
+<td>marketType</td>
+<td>string</td>
+<td>The type of market this update refers to. This is sent to distinguish between a <code>SPREAD</code> line change versus a <code>OVER_UNDER</code> line change, for example.</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event ID for this update</td>
+</tr>
+</tbody></table>
+
+<p>To get the actual line, you&#39;ll have to fetch the market using the <code>marketHash</code></p>
+<h2 id='live-score-updates'>Live score updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">sportXeventId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">L7178624</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`live_scores:</span><span class="p">${</span><span class="nx">sportXeventId</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7178624"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"currentPeriod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4th Set"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"periodTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1263</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"periods"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1st Set"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2nd Set"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3rd Set"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4th Set"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Game"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"extra"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Turn</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">DoubleFaults</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">{</span><span class="se">\\\"</span><span class="s2">3/6</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/7</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,2,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/4</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/5</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/4</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/5</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/6</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">2,2,0,0,0,0,2,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/7</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/12</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/11</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,2,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/8</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,1,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/8</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/9</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/9</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/7</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/6</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/5</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/4</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">4/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,2,0,2,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">4/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">4/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/10</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/9</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/10</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/8</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0</span><span class="se">\\\"</span><span class="s2">}</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">CourtSurfaceType</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Grass</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Aces</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">{</span><span class="se">\\\"</span><span class="s2">3/6</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/7</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/4</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/5</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,2,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/4</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">2,2,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/5</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,2</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/6</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/7</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/12</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">1,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,2,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,2,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/11</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/8</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/8</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/9</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/9</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/7</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/6</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/5</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/4</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">4/1</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">4/3</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">4/2</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">2,0,0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">3/10</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/9</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,0,0,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">1/10</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">0,0,2,0</span><span class="se">\\\"</span><span class="s2">,</span><span class="se">\\\"</span><span class="s2">2/8</span><span class="se">\\\"</span><span class="s2">:</span><span class="se">\\\"</span><span class="s2">2,0,0,0</span><span class="se">\\\"</span><span class="s2">}</span><span class="se">\"</span><span class="s2">}]"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to live score changes for a particular event.</p>
+<h3 id='channel-name-format-3'>Channel name format</h3>
+<p><code>live_scores:{sportXeventId}</code></p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event ID you wish to subscribe to</td>
+</tr>
+</tbody></table>
+<h3 id='message-payload-format-3'>Message payload format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>teamOneScore</td>
+<td>number</td>
+<td>The current score for team one. Referring to <code>teamOneName</code> in the <code>Market</code> object itself</td>
+</tr>
+<tr>
+<td>teamTwoScore</td>
+<td>number</td>
+<td>The current score for team two. Referring to <code>teamTwoName</code> in the <code>Market</code> object itself</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event ID for this update</td>
+</tr>
+<tr>
+<td>currentPeriod</td>
+<td>string</td>
+<td>An identifier for the current period</td>
+</tr>
+<tr>
+<td>periodTime</td>
+<td>string</td>
+<td>The current time for the period. &quot;-1&quot; if not applicable (for example, in tennis)</td>
+</tr>
+<tr>
+<td>sportId</td>
+<td>number</td>
+<td>The sport ID for this market</td>
+</tr>
+<tr>
+<td>leagueId</td>
+<td>number</td>
+<td>The league ID for this market</td>
+</tr>
+<tr>
+<td>periods</td>
+<td><code>Period</code></td>
+<td>Individual period information</td>
+</tr>
+<tr>
+<td>extra</td>
+<td>string</td>
+<td>JSON encoded extra data for this live score update</td>
+</tr>
+</tbody></table>
+
+<p>where a <code>Period</code> object looks like</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>label</td>
+<td>string</td>
+<td>The period name</td>
+</tr>
+<tr>
+<td>isFinished</td>
+<td>boolean</td>
+<td><code>true</code> if the period is over</td>
+</tr>
+<tr>
+<td>teamOneScore</td>
+<td>string</td>
+<td>The score of team one. Referring to <code>teamOneName</code> in the <code>Market</code> object itself</td>
+</tr>
+<tr>
+<td>teamTwoScore</td>
+<td>string</td>
+<td>The score of team two. Referring to <code>teamTwoName</code> in the <code>Market</code> object itself</td>
+</tr>
+</tbody></table>
+
+<p>To get the actual line, you&#39;ll have to fetch the market using the <code>marketHash</code></p>
+<h2 id='trade-updates'>Trade updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`recent_trades`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x814d79A9940CbC5Af4C19cAa118EC065a77CD31f"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"stake"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9999999999999999999"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"odds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48442571331686290000"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xf7321de419b8887eafe5756d25db37ed2796dfc2495a49e286f13c8533fddb67"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x32d6c7d300dc44c795e2bdb0c735d9ad74fd2bbece890129d4a5ea0ec6b566f1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"betTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1625668455</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"settled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x027f3237d9dc9dfa6068b60d852c3e9727768683a8c43b2e1a436029f0de924e"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to all trade updates on the exchange. You will receive updates when a trade is settled or a new trade is placed.</p>
+<h3 id='channel-name-format-4'>Channel name format</h3>
+<p><code>recent_trades</code></p>
+<h3 id='message-payload-format-4'>Message payload format</h3>
+<p>See <a href="#get-active-trades">the trades section</a> for the format of the message</p>
+<h2 id='active-order-updates'>Active order updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">0x082605F78dD83A8423113ecbEB794Fb3FFE470a2</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`active_orders:</span><span class="p">${</span><span class="nx">token</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">user</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"fillAmount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xf68bd21c1369a05ebb482b2e62b86ce54cca822c386e09cc7d365aeb9d2cd063"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x7a1951a47429177907d5abc1942f1c0f892c42408c0d6476a9b1cd86c2334205"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5b79A0Eb0485c207993Cf346CCa5FAa737637f3b"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"totalBetSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3924646781"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"percentageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"47846889952153115000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="mi">1625691600</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xa25dA0331Cd053FD17C47c8c34BCCBAaF516C438"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"executor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3259E7Ccc0993368fCB82689F5C534669A0C06ca"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"salt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"42365945710025775878588178788785307309925032652302130769385065396268280313010"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"isMakerBettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"signature"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xe3b2dc8b78bbb2cb1d1e6fda87f04103682e1ac1067ffd4a2b61e6cf734820d522c2719c95bb352d37f6b68c9f34e62e1efa0eaa0680f93e8e4d6c907799af3e1b"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"updateTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6982204685293715457"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to changes in a particular user&#39;s orders. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.</p>
+<h3 id='channel-name-format-5'>Channel name format</h3>
+<p><code>active_orders:{token}:{user}</code></p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>token</td>
+<td>string</td>
+<td>Restrict updates to only orders denominated in this token</td>
+</tr>
+<tr>
+<td>user</td>
+<td>string</td>
+<td>The user to subscribe to</td>
+</tr>
+</tbody></table>
+<h3 id='message-payload-format-5'>Message payload format</h3>
+<p>See <a href="#get-active-orders">the orders section</a> for the format of the message. Additional fields:</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>updateTime</td>
+<td>string</td>
+<td>Server-side clock time for the last modification of this order.</td>
+</tr>
+</tbody></table>
+
+<p>Note that the messages are sent in batches in an array. If you receive two updates for the same <code>orderHash</code> within an update, you can order them by <code>updateTime</code> after converting the <code>updateTime</code> to a BigInt or BigNumber.</p>
+<h2 id='order-book-updates'>Order book updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">marketHash</span> <span class="o">=</span>
+  <span class="dl">"</span><span class="s2">0x04b9af76dfb92e71500975db77b1de0bb32a0b2413f1b3facbb25278987519a7</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">0xa25dA0331Cd053FD17C47c8c34BCCBAaF516C438</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`order_book:</span><span class="p">${</span><span class="nx">token</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">marketHash</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"0x7bd766486f589f3e272d48294d8881fe68aae7704f7b2ef0a50bf6128be44271"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"INACTIVE"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"1000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"0x9883D5e7dC023A441A01Ef95aF406C69926a0AB6"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"1000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"20306024864520233000"</span><span class="p">,</span><span class="w">
+    </span><span class="mi">1625691600</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"1271418014917937117393617219009886912225128221921196717331617268846160092273"</span><span class="p">,</span><span class="w">
+    </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01c"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"6982204685293715457"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to changes in a particular order book. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms. Updates are packed into arrays to reduce total bandwidth.</p>
+<h3 id='channel-name-format-6'>Channel name format</h3>
+<p><code>order_book:{token}:{marketHash}</code></p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>token</td>
+<td>string</td>
+<td>Restrict updates to only orders denominated in this token</td>
+</tr>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>The market to subscribe to</td>
+</tr>
+</tbody></table>
+<h3 id='message-payload-format-6'>Message payload format</h3>
+<p>The order is packed into an array and the fields are sent in the below order, with the 0th index as the first row. Note that these are the same fields as mentioned in the <a href="#get-active-orders">the orders section</a>, with an additional <code>status</code> and <code>updateTime</code> field.</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderHash</td>
+<td>string</td>
+<td>A unique identifier for this order</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>&quot;ACTIVE&quot; if this order is still valid, &quot;INACTIVE&quot; otherwise</td>
+</tr>
+<tr>
+<td>fillAmount</td>
+<td>string</td>
+<td>How much this order has been filled in Ethereum units up to a max of <code>totalBetSize</code>. See <a href="#tokens">the token section</a> of how to convert this into nominal amounts</td>
+</tr>
+<tr>
+<td>maker</td>
+<td>string</td>
+<td>The market maker for this order</td>
+</tr>
+<tr>
+<td>totalBetSize</td>
+<td>string</td>
+<td>The total size of this order in Ethereum units. See the <a href="#tokens">the token section</a> section for how to convert this into nominal amounts.</td>
+</tr>
+<tr>
+<td>percentageOdds</td>
+<td>string</td>
+<td>The odds that the <code>maker</code> receives in the sportx protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula <code>takerOdds=1-percentageOdds/10^20</code>. See the <a href="#bookmaker-odds">unit conversion section</a> for more details.</td>
+</tr>
+<tr>
+<td>expiry</td>
+<td>number</td>
+<td>The time in unix seconds after which this order is no longer valid</td>
+</tr>
+<tr>
+<td>salt</td>
+<td>string</td>
+<td>A random number to differentiate identical orders</td>
+</tr>
+<tr>
+<td>isMakerBettingOutcomeOne</td>
+<td>boolean</td>
+<td><code>true</code> if the maker is betting outcome one (and hence taker is betting outcome two if filled)</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>string</td>
+<td>Signature of the maker on this order</td>
+</tr>
+<tr>
+<td>updateTime</td>
+<td>string</td>
+<td>Server-side clock time for the last modification of this order.</td>
+</tr>
+</tbody></table>
+
+<p>Note that the messages are sent in batches in an array. If you receive two updates for the same <code>orderHash</code> within an update, you can order them by <code>updateTime</code> after converting the <code>updateTime</code> to a BigInt or BigNumber.</p>
 
       </div>
       <div class="dark-box">
