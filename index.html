@@ -338,6 +338,14 @@
               </ul>
           </li>
           <li>
+            <a href="#sports" class="toc-h1 toc-link" data-title="Sports">Sports</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-sports" class="toc-h2 toc-link" data-title="Get sports">Get sports</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#trades" class="toc-h1 toc-link" data-title="Trades">Trades</a>
               <ul class="toc-list-h2">
                   <li>
@@ -531,7 +539,7 @@
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint retrieves active markets on the exchange</p>
+<p>This endpoint retrieves active markets on the exchange. It does not return markets that have been settled or reported.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://app.api.sportx.bet/markets/active</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
@@ -546,31 +554,31 @@
 <tr>
 <td>onlyMainLine</td>
 <td>false</td>
-<td>false</td>
+<td>boolean</td>
 <td>If set to true, the result will only include main lines on spread and over under markets</td>
 </tr>
 <tr>
 <td>eventId</td>
 <td>false</td>
-<td>undefined</td>
+<td>string</td>
 <td>If set, it will only include markets for a particular sportXeventId</td>
 </tr>
 <tr>
 <td>leagueId</td>
 <td>false</td>
-<td>undefined</td>
+<td>number</td>
 <td>If set, it will only include markets for a particular league ID</td>
 </tr>
 <tr>
 <td>liveOnly</td>
 <td>false</td>
-<td>false</td>
+<td>boolean</td>
 <td>If set, it will only include markets that are currently available for in-play betting</td>
 </tr>
 <tr>
 <td>betGroup</td>
 <td>false</td>
-<td>undefined</td>
+<td>string</td>
 <td>If set, it will only include markets for a particular bet group</td>
 </tr>
 </tbody></table>
@@ -674,7 +682,12 @@
 <td>The name of the sport for this market</td>
 </tr>
 <tr>
-<td>leagueID</td>
+<td>sportId</td>
+<td>number</td>
+<td>The ID of the sport for this market</td>
+</tr>
+<tr>
+<td>leagueId</td>
 <td>number</td>
 <td>The league ID for this market</td>
 </tr>
@@ -690,8 +703,8 @@
 </tr>
 <tr>
 <td>mainLine</td>
-<td>boolean</td>
-<td>If this market is currently the main line or not</td>
+<td>boolean?</td>
+<td>If this market is currently the main line or not. If the market is not a market with multiple lines, this field will not be present</td>
 </tr>
 <tr>
 <td>group1</td>
@@ -703,6 +716,21 @@
 <td>string?</td>
 <td>Indicator to the client of how to display this market</td>
 </tr>
+<tr>
+<td>teamOneMeta</td>
+<td>string?</td>
+<td>Extra metadata for team one</td>
+</tr>
+<tr>
+<td>teamTwoMeta</td>
+<td>string?</td>
+<td>Extra metadata for team two</td>
+</tr>
+<tr>
+<td>marketMeta</td>
+<td>string?</td>
+<td>Extra metadata for the market overall</td>
+</tr>
 </tbody></table>
 
 <p>A <code>MarketType</code> can currently be one of the following</p>
@@ -713,6 +741,8 @@
 <li><code>MONEY_LINE</code></li>
 <li><code>OUTRIGHT_WINNER</code></li>
 </ul>
+
+<p>More types might be added in the future.</p>
 <h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/markets/find'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
@@ -791,7 +821,7 @@
 </tr>
 </tbody></table>
 
-<p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted. Note that there are a few additional fields if you are querying a market that has been settled/reported</p>
+<p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted. Note that there are a few additional fields if you are querying a market that has been settled/reported:</p>
 
 <table><thead>
 <tr>
@@ -819,21 +849,6 @@
 <td>teamTwoScore</td>
 <td>number</td>
 <td>Final score of team two</td>
-</tr>
-<tr>
-<td>teamOneMeta</td>
-<td>string</td>
-<td>Extra metadata for team one</td>
-</tr>
-<tr>
-<td>teamTwoMeta</td>
-<td>string</td>
-<td>Extra metadata for team two</td>
-</tr>
-<tr>
-<td>marketMeta</td>
-<td>string</td>
-<td>Extra metadata for the market overall</td>
 </tr>
 </tbody></table>
 <h2 id='popular-markets'>Popular markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/popular'</span>
@@ -1101,6 +1116,140 @@
 <p><code>GET https://app.api.sportx.bet/leagues/active</code></p>
 <h3 id='response-format-2'>Response format</h3>
 <p>See <a href="#get-leagues">get leagues section</a> for how the <code>League</code> object is formatted</p>
+<h1 id='sports'>Sports</h1><h2 id='get-sports'>Get sports</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/sports'</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Basketball"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hockey"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Baseball"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Golf"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Soccer"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tennis"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mixed Martial Arts"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Football"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"E Sports"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Custom"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rugby Union"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Racing"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Boxing"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Crypto"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cricket"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Economics"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Politics"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Entertainment"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Medicinal"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rugby League"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint retrieves all sports available on the exchange</p>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>GET https://app.api.sportx.bet/sports</code></p>
+<h3 id='response-format'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not</td>
+</tr>
+<tr>
+<td>data</td>
+<td>Sport[]</td>
+<td>Sports available on the exchange</td>
+</tr>
+</tbody></table>
+
+<p>A <code>Sport</code> object looks like</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sportId</td>
+<td>number</td>
+<td>The ID of the sport</td>
+</tr>
+<tr>
+<td>label</td>
+<td>string</td>
+<td>The sport name</td>
+</tr>
+</tbody></table>
 <h1 id='trades'>Trades</h1><h2 id='get-active-trades'>Get active trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/trades'</span>
 </code></pre></div>
 <blockquote>
@@ -1587,10 +1736,9 @@
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7011313"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-05-27T18:56:45.128Z"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"currentPeriod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Full time"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"extra"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Balls</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bases</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0/0/1</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Strikes</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Outs</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">3</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Turn</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">}]"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-07-08T17:57:38.057Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"currentPeriod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8th Inning"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"extra"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Strikes</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Turn</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">2</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Balls</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Outs</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">2</span><span class="se">\"</span><span class="s2">},{</span><span class="se">\"</span><span class="s2">Name</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bases</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">Value</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">0/0/0</span><span class="se">\"</span><span class="s2">}]"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"leagueId"</span><span class="p">:</span><span class="w"> </span><span class="mi">171</span><span class="p">,</span><span class="w">
       </span><span class="nl">"periodTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-1"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"periods"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -1598,7 +1746,7 @@
           </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1st Inning"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
           </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="w">
         </span><span class="p">},</span><span class="w">
         </span><span class="p">{</span><span class="w">
           </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2nd Inning"</span><span class="p">,</span><span class="w">
@@ -1628,7 +1776,7 @@
           </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6th Inning"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
           </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="w">
+          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
         </span><span class="p">},</span><span class="w">
         </span><span class="p">{</span><span class="w">
           </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7th Inning"</span><span class="p">,</span><span class="w">
@@ -1637,30 +1785,17 @@
           </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
         </span><span class="p">},</span><span class="w">
         </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Full time"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
           </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8th Inning"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
           </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9th Inning"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"isFinished"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">],</span><span class="w">
-      </span><span class="nl">"provider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LSPORT"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-05-28T16:39:29.410Z"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7011313"</span><span class="w">
+      </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-07-08T20:35:21.607Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7187811"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -1737,6 +1872,26 @@
 <td>periods</td>
 <td>Period[]</td>
 <td>All of the periods in the match</td>
+</tr>
+<tr>
+<td>sportId</td>
+<td>number</td>
+<td>The ID of the sport for this match</td>
+</tr>
+<tr>
+<td>teamOneScore</td>
+<td>number</td>
+<td>The current score for team one</td>
+</tr>
+<tr>
+<td>teamTwoScore</td>
+<td>number</td>
+<td>The current score for team two</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event ID for this match</td>
 </tr>
 </tbody></table>
 
