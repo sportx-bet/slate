@@ -2245,7 +2245,9 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
   <span class="p">],</span>
   <span class="nx">wallet</span>
 <span class="p">);</span>
-<span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">tokenTransferProxyAddress</span><span class="p">,</span> <span class="nx">MaxUInt256</span><span class="p">);</span>
+<span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">approve</span><span class="p">(</span><span class="nx">tokenTransferProxyAddress</span><span class="p">,</span> <span class="nx">MaxUInt256</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">gasLimit</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>
+<span class="p">});</span>
 </code></pre></div>
 <p>To enable betting, you need to approve the <code>TokenTransferProxy</code> contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you&#39;ll need to approve the contract twice, once for each token. The address of the <code>TokenTransferProxy</code> is <code>0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e</code> and the address of each token is given in <a href="#tokens">the tokens section</a></p>
 
@@ -2276,13 +2278,13 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
   <span class="na">marketHash</span><span class="p">:</span>
     <span class="dl">"</span><span class="s2">0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">maker</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x6F75bA6c90E3da79b7ACAfc0fb9cf3968aa4ee39</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">totalBetSize</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="dl">"</span><span class="s2">21600000000000000000</span><span class="dl">"</span><span class="p">),</span>
-  <span class="na">percentageOdds</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="dl">"</span><span class="s2">47846889952153115000</span><span class="dl">"</span><span class="p">),</span>
+  <span class="na">totalBetSize</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="dl">"</span><span class="s2">21600000000000000000</span><span class="dl">"</span><span class="p">).</span><span class="nx">toString</span><span class="p">(),</span>
+  <span class="na">percentageOdds</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="dl">"</span><span class="s2">47846889952153115000</span><span class="dl">"</span><span class="p">).</span><span class="nx">toString</span><span class="p">(),</span>
   <span class="na">baseToken</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">expiry</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">1631233201</span><span class="p">),</span>
+  <span class="na">expiry</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">1631233201</span><span class="p">).</span><span class="nx">toString</span><span class="p">(),</span>
   <span class="na">executor</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x3E91041b9e60C7275f8296b8B0a97141e6442d49</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">isMakerBettingOutcomeOne</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="na">salt</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)),</span>
+  <span class="na">salt</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)).</span><span class="nx">toString</span><span class="p">(),</span>
 <span class="p">};</span>
 
 <span class="kd">const</span> <span class="nx">orderHash</span> <span class="o">=</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">arrayify</span><span class="p">(</span>
@@ -2341,7 +2343,13 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint offers new orders on the exchange (market making).</p>
+<p>This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee or require you to have any MATIC tokens in your wallet. </p>
+
+<p>Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by <code>totalBetSize - fillAmount</code>) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again. </p>
+
+<aside class="warning">
+If the API finds that your balance is consistently below your total exposure requiring orders to be cancelled, your account may be temporarily restricted. 
+</aside>
 
 <p>To offer bets on sportx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a>.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
@@ -2423,6 +2431,10 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
 <td>The signature of the maker on this order payload</td>
 </tr>
 </tbody></table>
+
+<aside class="notice">
+The address in the <code>maker</code> field must match the account being used to create the signature!
+</aside>
 <h3 id='response-format-2'>Response format</h3>
 <table><thead>
 <tr>
@@ -2852,7 +2864,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.</p>
+<p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. <em>Therefore you do not require any MATIC in your wallet to fill orders</em>.</p>
 
 <p>Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
 
