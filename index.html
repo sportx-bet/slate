@@ -482,7 +482,7 @@
         </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_CONTEST"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nikoloz Basilashvili"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carlos Alcaraz"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MONEY_LINE"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">226</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1622735700</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
@@ -501,7 +501,7 @@
         </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_GAME_OR_EVEN"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nikoloz Basilashvili"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carlos Alcaraz"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OVER_UNDER"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1622735700</span><span class="p">,</span><span class="w">
         </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mf">36.5</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
@@ -522,7 +522,7 @@
         </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_GAME_OR_EVEN"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nikoloz Basilashvili"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carlos Alcaraz"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SPREAD"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1622735700</span><span class="p">,</span><span class="w">
         </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
@@ -664,7 +664,7 @@
 <tr>
 <td>line</td>
 <td>number?</td>
-<td>The line of the market (only applicable to markets with a line, for example SPREAD or OVER_UNDER)</td>
+<td>The line of the market. Only applicable to markets with a line</td>
 </tr>
 <tr>
 <td>sportXeventId</td>
@@ -735,14 +735,81 @@
 
 <p>A <code>MarketType</code> can currently be one of the following</p>
 
-<ul>
-<li><code>OVER_UNDER</code></li>
-<li><code>SPREAD</code></li>
-<li><code>MONEY_LINE</code></li>
-<li><code>OUTRIGHT_WINNER</code></li>
-</ul>
+<table><thead>
+<tr>
+<th>ID</th>
+<th>Description</th>
+<th>Has Lines</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>12</td>
+<td>false</td>
+</tr>
+<tr>
+<td>88</td>
+<td>To Qualify</td>
+<td>false</td>
+</tr>
+<tr>
+<td>226</td>
+<td>12 Including Overtime</td>
+<td>false</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Asian Handicap</td>
+<td>true</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Asian Handicap Games</td>
+<td>true</td>
+</tr>
+<tr>
+<td>342</td>
+<td>Asian Handicap Including Overtime</td>
+<td>true</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Under/Over</td>
+<td>true</td>
+</tr>
+<tr>
+<td>835</td>
+<td>Asian Under/Over</td>
+<td>true</td>
+</tr>
+<tr>
+<td>28</td>
+<td>Under/Over Including Overtime</td>
+<td>true</td>
+</tr>
+<tr>
+<td>29</td>
+<td>Under/Over Rounds</td>
+<td>true</td>
+</tr>
+<tr>
+<td>166</td>
+<td>Under/Over Games</td>
+<td>true</td>
+</tr>
+<tr>
+<td>1536</td>
+<td>Under/Over Maps</td>
+<td>true</td>
+</tr>
+<tr>
+<td>274</td>
+<td>Outright Winner</td>
+<td>false</td>
+</tr>
+</tbody></table>
 
-<p>More types might be added in the future.</p>
+<p>More types will be added continuously.</p>
 <h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/markets/find'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
@@ -763,7 +830,7 @@
       </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_GAME_OR_EVEN"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aston Villa"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Burnley"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OVER_UNDER"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
       </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1608228000</span><span class="p">,</span><span class="w">
       </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.5</span><span class="p">,</span><span class="w">
       </span><span class="nl">"reportedDate"</span><span class="p">:</span><span class="w"> </span><span class="mi">1608234719</span><span class="p">,</span><span class="w">
@@ -867,7 +934,7 @@
       </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_GAME"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ismagulov D."</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rafael da Silva Alves"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MONEY_LINE"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">226</span><span class="p">,</span><span class="w">
       </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1621724400</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6896568"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -886,7 +953,7 @@
       </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_GAME_OR_EVEN"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"West Ham United"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Southampton"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SPREAD"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
       </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1621782000</span><span class="p">,</span><span class="w">
       </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6973172"</span><span class="p">,</span><span class="w">
@@ -3239,7 +3306,7 @@ You only need one instance of the <code>ably</code> object to connect to the API
     </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa Bay Rays"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cleveland Indians"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OVER_UNDER"</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
@@ -3264,12 +3331,11 @@ You only need one instance of the <code>ably</code> object to connect to the API
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x38cceead7bda65c18574a34994ebd8af154725d08aa735dcbf26247a7dcc67bd"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"marketType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OVER_UNDER"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"marketType"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
   </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7178624"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Subscribe to all line changes. Messages are sent for particular combinations of event IDs and market types. Note that only market types with lines will have updates sent. For example,
-<code>MONEY_LINE</code> markets will not have main line changes.</p>
+<p>Subscribe to all line changes. Messages are sent for particular combinations of event IDs and market types. Note that only market types with lines will have updates sent. See <a href="#get-active-markets">the active markets section</a> for details on which types have lines.</p>
 <h3 id='channel-name-format-2'>Channel name format</h3>
 <p><code>main_line</code></p>
 <h3 id='message-payload-format-2'>Message payload format</h3>
@@ -3287,8 +3353,8 @@ You only need one instance of the <code>ably</code> object to connect to the API
 </tr>
 <tr>
 <td>marketType</td>
-<td>string</td>
-<td>The type of market this update refers to. This is sent to distinguish between a <code>SPREAD</code> line change versus a <code>OVER_UNDER</code> line change, for example.</td>
+<td>number</td>
+<td>The type of market this update refers to.</td>
 </tr>
 <tr>
 <td>sportXeventId</td>
