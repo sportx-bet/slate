@@ -393,6 +393,14 @@
               </ul>
           </li>
           <li>
+            <a href="#bridging" class="toc-h1 toc-link" data-title="Bridging">Bridging</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#fast-withdraw" class="toc-h2 toc-link" data-title="Fast withdraw">Fast withdraw</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#unit-conversion" class="toc-h1 toc-link" data-title="Unit Conversion">Unit Conversion</a>
               <ul class="toc-list-h2">
                   <li>
@@ -422,6 +430,14 @@
           </li>
           <li>
             <a href="#fees" class="toc-h1 toc-link" data-title="Fees">Fees</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#trading" class="toc-h2 toc-link" data-title="Trading">Trading</a>
+                  </li>
+                  <li>
+                    <a href="#fast-withdraw-fees" class="toc-h2 toc-link" data-title="Fast withdraw fees">Fast withdraw fees</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#websocket-api" class="toc-h1 toc-link" data-title="Websocket API">Websocket API</a>
@@ -458,7 +474,7 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Be your own bookmaker and fill orders programmatically with the SportX API!</p>
+<p>Be your own bookmaker or fill orders programmatically with the SportX API!</p>
 
 <p>Questions? <a href="https://discord.gg/xXUynCX">Join our chat</a></p>
 
@@ -539,7 +555,7 @@
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint retrieves active markets on the exchange. It does not return markets that have been settled or reported.</p>
+<p>This endpoint retrieves active markets on the exchange. It does not return markets that have been settled or reported. Note that to retrieve odds for a particular market, you must query the orders endpoint <a href="#get-active-orders">the orders endpoint</a> separately.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://app.api.sportx.bet/markets/active</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
@@ -2363,6 +2379,10 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
 <p>If you don&#39;t wish to do this programmatically, you can simply go to <code>https://sportx.bet</code>, make a test bet with the account and token you&#39;ll be using, and you will be good to go.</p>
 
 <p>If you want to do it programmatically, see the code sample on the right. Note you will need a little bit of MATIC to make this transaction (~$0.01 worth).</p>
+
+<aside class="notice">
+Your assets must be on polygon to place or fill orders via the API.
+</aside>
 <h2 id='post-a-new-order'>Post a new order</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/new'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
@@ -2455,6 +2475,10 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
 <p>This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee or require you to have any MATIC tokens in your wallet. </p>
 
 <p>Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by <code>totalBetSize - fillAmount</code>) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again. </p>
+
+<aside class="notice">
+Your assets must be on polygon to place orders.
+</aside>
 
 <aside class="warning">
 If the API finds that your balance is consistently below your total exposure requiring orders to be cancelled, your account may be temporarily restricted. 
@@ -2978,6 +3002,10 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <p>Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
 
 <p>To fill orders on sportx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a></p>
+
+<aside class="notice">
+Your assets must be on Polygon to place bets.
+</aside>
 <h3 id='http-request-4'>HTTP Request</h3>
 <p><code>POST https://app.api.sportx.bet/orders/fill</code></p>
 <h3 id='request-payload-parameters-4'>Request payload parameters</h3>
@@ -3142,6 +3170,221 @@ Note that <code>fillAmounts</code> are from *the perspective of the market maker
 <aside class="notice">
 To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
+<h1 id='bridging'>Bridging</h1><h2 id='fast-withdraw'>Fast withdraw</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'http://app.api.sportx.bet/bridge/fast-exit/lock'</span> <span class="se">\</span>
+<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">--data-raw</span> <span class="s1">'{"owner":"0x92B1BE018E7Ef135838dF996F0c0e4cFaafe8c8F","spender":"0xC1b6dA1545D81684D4cf08A999B099f52C828E51","tokenAddress":"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063","amount":"100000000000000000000","signature":"0xef8c1293c948bf1fd9ecc81003b6190f6e006fd2d746fcd9c9e8d29ce08d364c1884272d183b5792d275fa624408f372df742b15d143ffc90fd8c0fe179763031b"}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BigNumber</span><span class="p">,</span> <span class="nx">Contract</span><span class="p">,</span> <span class="nx">providers</span><span class="p">,</span> <span class="nx">utils</span><span class="p">,</span> <span class="nx">Wallet</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">parseUnits</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/lib/utils</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">fetch</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">node-fetch</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">fastExit</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="o">!</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">tokenAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_ADDRESS</span><span class="o">!</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">fastExitSpenderAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">FAST_EXIT_SPENDER_ADDRESS</span><span class="p">;</span> <span class="c1">// See the request payload for what this should be </span>
+  <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">withdrawAmount</span> <span class="o">=</span> <span class="nx">parseUnits</span><span class="p">(</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span> <span class="mi">18</span><span class="p">);</span>
+  <span class="c1">// Note that because this transaction is executing on polygon, you must pass a JSON-RPC endpoint for Polygon, not Ethereum mainnet.</span>
+  <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span>
+    <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">POLYGON_PROVIDER_URL</span><span class="p">)</span>
+  <span class="p">);</span>
+
+  <span class="kd">const</span> <span class="nx">tokenContract</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Contract</span><span class="p">(</span>
+    <span class="nx">tokenAddress</span><span class="p">,</span>
+    <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">constant</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">usr</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">wad</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">approve</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">outputs</span><span class="p">:</span> <span class="p">[{</span> <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bool</span><span class="dl">"</span> <span class="p">}],</span>
+        <span class="na">payable</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonpayable</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">user</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">getNonce</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">outputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonce</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">view</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">owner</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonces</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">outputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
+          <span class="p">},</span>
+        <span class="p">],</span>
+        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">view</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">constant</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">],</span>
+    <span class="nx">wallet</span>
+  <span class="p">);</span>
+
+  <span class="kd">let</span> <span class="nx">nonce</span><span class="p">:</span> <span class="nx">BigNumber</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span>
+    <span class="nx">tokenAddress</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174</span><span class="dl">"</span> <span class="c1">// USDC has a non-standard get nonce method</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">nonce</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">nonces</span><span class="p">(</span><span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">nonce</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">getNonce</span><span class="p">(</span><span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kd">const</span> <span class="nx">tokenName</span><span class="p">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">name</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">abiEncodedFunctionSig</span> <span class="o">=</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="kr">interface</span><span class="p">.</span><span class="nx">encodeFunctionData</span><span class="p">(</span>
+    <span class="dl">"</span><span class="s2">approve</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">[</span><span class="nx">fastExitSpenderAddress</span><span class="p">,</span> <span class="nx">withdrawAmount</span><span class="p">]</span>
+  <span class="p">);</span>
+
+  <span class="kd">const</span> <span class="nx">approveProxySigningPayload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">verifyingContract</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+      <span class="na">MetaTransaction</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonce</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">functionSignature</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes</span><span class="dl">"</span> <span class="p">},</span>
+      <span class="p">],</span>
+    <span class="p">},</span>
+    <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="nx">tokenName</span><span class="p">,</span>
+      <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">salt</span><span class="p">:</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">hexZeroPad</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hexlify</span><span class="p">(</span><span class="mi">137</span><span class="p">),</span> <span class="mi">32</span><span class="p">),</span>
+      <span class="na">verifyingContract</span><span class="p">:</span> <span class="nx">tokenAddress</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nx">nonce</span><span class="p">,</span>
+      <span class="na">from</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
+      <span class="na">functionSignature</span><span class="p">:</span> <span class="nx">abiEncodedFunctionSig</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">MetaTransaction</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">};</span>
+
+  <span class="c1">// log.info("------- fastExit approveSpenderPayload", inspect(signaturePayload));</span>
+
+  <span class="kd">const</span> <span class="nx">approveSpenderSignature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">data</span><span class="p">:</span> <span class="nx">approveProxySigningPayload</span><span class="p">,</span>
+  <span class="p">});</span>
+
+  <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">owner</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
+    <span class="na">spender</span><span class="p">:</span> <span class="nx">fastExitSpenderAddress</span><span class="p">,</span>
+    <span class="na">tokenAddress</span><span class="p">:</span> <span class="nx">tokenAddress</span><span class="p">,</span>
+    <span class="na">amount</span><span class="p">:</span> <span class="nx">withdrawAmount</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+    <span class="na">signature</span><span class="p">:</span> <span class="nx">approveSpenderSignature</span><span class="p">,</span>
+  <span class="p">};</span>
+
+  <span class="c1">// log.info("------- fastExit payload", inspect(payload));</span>
+
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span>
+    <span class="dl">"</span><span class="s2">https://app.api.sportx.bet/bridge/fast-exit/lock</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">),</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
+    <span class="p">}</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w"> </span><span class="p">}</span><span class="w">
+
+
+</span></code></pre></div>
+<p>This endpoint allows users to bridge assets from Polygon to Ethereum mainnet in an instant and trust-minimized manner. A fee is charged in-kind on the transaction, meaning that you are charged a dollar amount worth of the token you are withdrawing as payment for the decreased transaction time. For example if you withdraw $1000 DAI and the fee is $50, you will receive $950 DAI on Ethereum mainnet. Therefore, this is an effective minimum on the withdraw amount. Please see <a href="#fast-withdraw-fees">the fee section</a> for what this fee is currently set it. </p>
+
+<p>Transactions are usually processed within a minute compared to ~45m on the official Polygon bridge, but might be longer if Polygon is significantly clogged.</p>
+
+<aside class="warning">
+Attempting to withdraw less than the fee amount will not work and you will receive $0 on Ethereum mainnet. 
+</aside>
+<h3 id='http-request'>HTTP Request</h3>
+<p><code>POST https://app.api.sportx.bet/bridge/fast-exit/lock</code></p>
+<h3 id='request-payload-parameters'>Request payload parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>owner</td>
+<td>true</td>
+<td>string</td>
+<td>The account whose tokens you wish to bridge</td>
+</tr>
+<tr>
+<td>spender</td>
+<td>true</td>
+<td>string</td>
+<td>The bridge address. Must be <code>0xC1b6dA1545D81684D4cf08A999B099f52C828E51</code></td>
+</tr>
+<tr>
+<td>tokenAddress</td>
+<td>true</td>
+<td>string</td>
+<td>The token contract address on polygon that you wish to bridge</td>
+</tr>
+<tr>
+<td>amoount</td>
+<td>true</td>
+<td>string</td>
+<td>The amount you wish to bridge in ethereum units. See the <a href="#tokens">the token section</a> section for how to convert this into nominal amounts.</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>true</td>
+<td>string</td>
+<td>The signature of the account on this payload. See one of the code samples for how to do this.</td>
+</tr>
+</tbody></table>
+<h3 id='response-format'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not.</td>
+</tr>
+</tbody></table>
 <h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
 <p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 DAI is actually stored as 100 * 10^18 DAI on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value</p>
 
@@ -3293,10 +3536,12 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <td>0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d</td>
 </tr>
 </tbody></table>
-<h1 id='fees'>Fees</h1>
+<h1 id='fees'>Fees</h1><h2 id='trading'>Trading</h2>
 <p>Fees are set as 4% on the profits of your bet. For example, if you bet 100 DAI to win 200 DAI and you win, your profit is <code>200 - 100 = 100 DAI</code> and the fees paid is <code>100 * 0.04 = 4 DAI</code>. This fee can be reduced by staking SX. See the <a href="https://sportx.bet/token/discount">fee discount page</a> for details.</p>
 
 <p>There are no maker or taker fees.</p>
+<h2 id='fast-withdraw-fees'>Fast withdraw fees</h2>
+<p>The fast withdraw bridge fee is currently set to $50 in-kind in the token you are withdrawing. This is subject to change at any time depending on market conditions.</p>
 <h1 id='websocket-api'>Websocket API</h1>
 <p>You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.</p>
 <h2 id='initialization'>Initialization</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">ably</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ably</span><span class="dl">"</span><span class="p">;</span>
