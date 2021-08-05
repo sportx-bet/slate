@@ -1318,6 +1318,22 @@ Note that this endpoint is only updated every 10m.
 </aside>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>GET https://app.api.sportx.bet/leagues/active</code></p>
+<h3 id='query-parameters-2'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sportId</td>
+<td>true</td>
+<td>number</td>
+<td>Only return active leagues under this sport</td>
+</tr>
+</tbody></table>
 <h3 id='response-format-2'>Response format</h3>
 <p>See <a href="#get-leagues">get leagues section</a> for how the response object is formatted. There is an additional field <code>eventsByType</code> which maps the number of unique events within a particular bet group (for example, <code>game-lines</code> or <code>outright-winner</code>).</p>
 <h1 id='sports'>Sports</h1><h2 id='get-sports'>Get sports</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/sports'</span>
