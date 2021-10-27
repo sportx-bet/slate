@@ -503,6 +503,10 @@
 <p>We support betting in DAI, WETH, and USDC.</p>
 
 <p>If you wish to use our wrapper for javascript you can do so <a href="https://github.com/sportx-bet/sportx-js">here</a></p>
+
+<aside class="notice">
+All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
+</aside>
 <h1 id='markets'>Markets</h1><h2 id='get-active-markets'>Get active markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/active?onlyMainLine=true'</span>
 </code></pre></div>
 <blockquote>
@@ -3253,7 +3257,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
     <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">CancelOrderSportX</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
-    <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">chainId</span><span class="p">:</span> <span class="mi">137</span><span class="p">,</span>
   <span class="p">},</span>
   <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
     <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Are you sure you want to cancel these orders</span><span class="dl">"</span><span class="p">,</span>
@@ -3290,6 +3294,10 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint cancels existing orders on the exchange.</p>
+
+<aside class="notice">
+Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+</aside>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://app.api.sportx.bet/orders/cancel</code></p>
 <h3 id='request-payload-parameters-3'>Request payload parameters</h3>
@@ -3507,6 +3515,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">makerSigs</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes[]</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">takerAmounts</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256[]</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fillSalt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">beneficiary</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">}</span>
       <span class="p">],</span>
       <span class="na">Order</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">marketHash</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
@@ -3523,9 +3532,9 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
     <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SportX</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-      <span class="na">verifyingContract</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3.0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="mi">137</span><span class="p">,</span>
+      <span class="na">verifyingContract</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xCD667A4E7E377388b3aD8d57C3AEc4aC914c84Eb</span><span class="dl">"</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">action</span><span class="p">:</span> <span class="dl">"</span><span class="s2">N/A</span><span class="dl">"</span><span class="p">,</span>
@@ -3549,6 +3558,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
         <span class="p">})),</span>
         <span class="nx">takerAmounts</span><span class="p">,</span>
         <span class="nx">fillSalt</span><span class="p">,</span>
+        <span class="na">beneficiary</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">AddressZero</span>
       <span class="p">},</span>
     <span class="p">},</span>
   <span class="p">};</span>
@@ -3635,6 +3645,10 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 
 <aside class="notice">
 Your assets must be on Polygon to place bets.
+</aside>
+
+<aside class="notice">
+Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
 </aside>
 <h3 id='http-request-4'>HTTP Request</h3>
 <p><code>POST https://app.api.sportx.bet/orders/fill</code></p>
@@ -4039,17 +4053,17 @@ Attempting to withdraw less than the fee amount will not work and you will recei
 </thead><tbody>
 <tr>
 <td>USDC</td>
-<td>0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174</td>
+<td><code>0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174</code></td>
 <td>6</td>
 </tr>
 <tr>
 <td>DAI</td>
-<td>0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</td>
+<td><code>0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</code></td>
 <td>18</td>
 </tr>
 <tr>
 <td>WETH</td>
-<td>0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619</td>
+<td><code>0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619</code></td>
 <td>18</td>
 </tr>
 </tbody></table>
@@ -4117,7 +4131,7 @@ Attempting to withdraw less than the fee amount will not work and you will recei
     <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">CancelOrderSportX</span><span class="dl">"</span><span class="p">,</span>
       <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="mi">137</span>
     <span class="p">},</span>
     <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Are you sure you want to cancel these orders</span><span class="dl">"</span>
@@ -4151,7 +4165,7 @@ Attempting to withdraw less than the fee amount will not work and you will recei
     <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">CancelOrderSportX</span><span class="dl">"</span><span class="p">,</span>
       <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1.0</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">chainId</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="mi">137</span>
     <span class="p">},</span>
     <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Are you sure you want to cancel these orders</span><span class="dl">"</span>
@@ -4172,15 +4186,15 @@ Attempting to withdraw less than the fee amount will not work and you will recei
 </thead><tbody>
 <tr>
 <td>TokenTransferProxy</td>
-<td>0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e</td>
+<td><code>0x3d8A563962dFeE81D7780Ed2BF0257ab88df857D</code></td>
 </tr>
 <tr>
 <td>EIP712FillHasher</td>
-<td>0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d</td>
+<td><code>0xCD667A4E7E377388b3aD8d57C3AEc4aC914c84Eb</code></td>
 </tr>
 </tbody></table>
 <h1 id='fees'>Fees</h1><h2 id='trading'>Trading</h2>
-<p>Fees are set as 4% on the profits of your bet. For example, if you bet 100 DAI to win 200 DAI and you win, your profit is <code>200 - 100 = 100 DAI</code> and the fees paid is <code>100 * 0.04 = 4 DAI</code>. This fee can be reduced by staking SX. See the <a href="https://sportx.bet/token/discount">fee discount page</a> for details.</p>
+<p>Fees are capped at 4% on the profits of your bet. This fee can be reduced by staking SX. For example, if you bet 100 DAI to win 200 DAI and you win, your profit is <code>200 - 100 = 100 DAI</code> and the fees paid is <code>100 * 0.04 = 4 DAI</code>. See the <a href="https://sportx.bet/token/discount">fee discount page</a> for details.</p>
 
 <p>There are no maker or taker fees.</p>
 <h2 id='fast-withdraw-fees'>Fast withdraw fees</h2>
