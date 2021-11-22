@@ -2319,33 +2319,45 @@ Note that this endpoint is only updated every 10m.
 </tr>
 <tr>
 <td>settled</td>
-<td>false</td>
+<td>true</td>
 <td>boolean</td>
 <td>If <code>true</code> only get settled trades</td>
 </tr>
 <tr>
 <td>page</td>
-<td>false</td>
+<td>true</td>
 <td>number</td>
 <td>Page number for pagination</td>
 </tr>
 <tr>
 <td>perPage</td>
-<td>false</td>
+<td>true</td>
 <td>number</td>
 <td>Amount of records to fetch per page</td>
 </tr>
 <tr>
 <td>sortBy</td>
-<td>false</td>
+<td>true</td>
 <td>string</td>
 <td>Which field to sort by (see response for field names)</td>
 </tr>
 <tr>
 <td>sortAsc</td>
-<td>false</td>
+<td>true</td>
 <td>boolean</td>
 <td>If <code>true</code>, sorts in ascending order</td>
+</tr>
+<tr>
+<td>maker</td>
+<td>false</td>
+<td>boolean</td>
+<td>If <code>true</code>, only gets trades where the bettor was a market maker</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>false</td>
+<td>string</td>
+<td>Only gets trades for this event ID</td>
 </tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
