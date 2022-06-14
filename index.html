@@ -621,7 +621,7 @@ If you lose your key, you can generate a new one by following the same steps. An
         </span><span class="nl">"group1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ATP French Open"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nl">"paginationKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60c7b8f54da0ad001aa3261c"</span><span class="w">
+    </span><span class="nl">"nextKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"60c7b8f54da0ad001aa3261c"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -656,6 +656,12 @@ If you lose your key, you can generate a new one by following the same steps. An
 <td>If set, it will only include markets for a particular league ID</td>
 </tr>
 <tr>
+<td>sportIds</td>
+<td>false</td>
+<td>number[]</td>
+<td>If set, it will only include markets for particular sport IDs (comma separated)</td>
+</tr>
+<tr>
 <td>liveOnly</td>
 <td>false</td>
 <td>boolean</td>
@@ -679,14 +685,16 @@ If you lose your key, you can generate a new one by following the same steps. An
 <td>string</td>
 <td>Used for pagination. Pass the <code>nextKey</code> returned from the previous request to retrieve the next set of records.</td>
 </tr>
+<tr>
+<td>pageSize</td>
+<td>false</td>
+<td>number</td>
+<td>Used for pagination. Requested page size. Each call will only return up to this amount of records. Maximum of 50</td>
+</tr>
 </tbody></table>
 
 <aside class="notice">
 Only one of <code>type</code> and <code>betGroup</code> can be present. Not both.
-</aside>
-
-<aside class="notice">
-This call will return a maximum of 50 markets at a time. You must use pagination to retrieve the rest of the records. 
 </aside>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
