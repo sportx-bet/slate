@@ -672,10 +672,20 @@ If you lose your key, you can generate a new one by following the same steps. An
 <td>number</td>
 <td>If set, it will only include markets for a particular market type. See below for the options</td>
 </tr>
+<tr>
+<td>paginationKey</td>
+<td>false</td>
+<td>string</td>
+<td>Used for pagination. Pass the <code>nextKey</code> returned from the previous request to retrieve the next set of records.</td>
+</tr>
 </tbody></table>
 
 <aside class="notice">
 Only one of <code>type</code> and <code>betGroup</code> can be present. Not both.
+</aside>
+
+<aside class="notice">
+This call will return a maximum of 50 markets at a time. You must use pagination to retrieve the rest of the records. 
 </aside>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
@@ -699,6 +709,11 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>&gt; markets</td>
 <td>Market[]</td>
 <td>The active markets</td>
+</tr>
+<tr>
+<td>&gt; nextKey</td>
+<td>string</td>
+<td>Use this key as the <code>paginationKey</code> to retrieve the next set of records, if any</td>
 </tr>
 </tbody></table>
 
@@ -1074,7 +1089,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>marketHashes</td>
 <td>true</td>
 <td>string[]</td>
-<td>The market hashes of the markets to retrieve</td>
+<td>The market hashes of the markets to retrieve. Maximum 50.</td>
 </tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
@@ -2096,7 +2111,7 @@ Note that this endpoint is only updated every 10m.
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint retrieves past trades on the exchange split up by order. This is a paginated endpoint. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor. It is returned</p>
+<p>This endpoint retrieves past trades on the exchange split up by order. This is a paginated endpoint. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>POST https://app.api.sportx.bet/trades</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
@@ -2616,6 +2631,10 @@ Note that this endpoint is only updated every 10m.
 <td>An array of event IDs</td>
 </tr>
 </tbody></table>
+
+<aside class="notice">
+Up to 50 event IDs can be supplied at a time. 
+</aside>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
