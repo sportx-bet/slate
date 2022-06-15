@@ -506,7 +506,7 @@
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='https://sportx.bet'>Visit sportx.bet</a></li>
+            <li><a href='https://sx.bet'>Visit sx.bet</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -536,13 +536,13 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <li>Click the <code>Overview</code> tab on the account navigation bar.</li>
 <li>You will see an <code>API Credentials</code> card. Complete the <code>Basic Verification</code> if you have not yet done so by clicking the link in the card.</li>
 <li>If you&#39;ve signed in and completed the basic verification, you can now click the button: <code>GENERATE API KEY NOW</code>. An API Key will be displayed.</li>
-<li>The API Key generated will not be displayed again, so please <b>copy and save this key for future use</b>. </li>
+<li>The API Key generated will not be displayed again, so please <b>copy and save this key for future use</b>.</li>
 </ol>
 
 <aside class="notice">
 If you lose your key, you can generate a new one by following the same steps. Any previous keys used will be unauthorized if you generate a new key.
 </aside>
-<h2 id='usage'>Usage</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/active?onlyMainLine=true'</span> <span class="se">\</span>
+<h2 id='usage'>Usage</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/markets/active?onlyMainLine=true'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'X-Api-Key: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'</span>
 </code></pre></div>
 <blockquote>
@@ -550,7 +550,7 @@ If you lose your key, you can generate a new one by following the same steps. An
 </blockquote>
 
 <p>Once your API Key is generated (see above), you can use it in your HTTP Requests as a header to automatically allow elevated rate limits. You must add it as a HTTP Header with the name: <code>X-Api-Key</code>.</p>
-<h1 id='markets'>Markets</h1><h2 id='get-active-markets'>Get active markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/active?onlyMainLine=true'</span>
+<h1 id='markets'>Markets</h1><h2 id='get-active-markets'>Get active markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/markets/active?onlyMainLine=true'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -627,7 +627,7 @@ If you lose your key, you can generate a new one by following the same steps. An
 </span></code></pre></div>
 <p>This endpoint retrieves active markets on the exchange. It does not return markets that have been settled or reported. Note that to retrieve odds for a particular market, you must query the orders endpoint <a href="#get-active-orders">the orders endpoint</a> separately.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/markets/active</code></p>
+<p><code>GET https://api.sx.bet/markets/active</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
 <table><thead>
 <tr>
@@ -1043,7 +1043,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </tbody></table>
 
 <p>More types will be added continuously.</p>
-<h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/markets/find'</span> <span class="se">\</span>
+<h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/markets/find'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "marketHashes": ["0x3cba25f2253035b015b9bb555c1bf900f6737704d57425dd2a5b60e929c33b81"]
@@ -1084,7 +1084,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </span></code></pre></div>
 <p>This endpoint retrieves specific markets</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/markets/find</code></p>
+<p><code>POST https://api.sx.bet/markets/find</code></p>
 <h3 id='request-format'>Request format</h3>
 <table><thead>
 <tr>
@@ -1151,7 +1151,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>Final score of team two</td>
 </tr>
 </tbody></table>
-<h2 id='popular-markets'>Popular markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/markets/popular'</span>
+<h2 id='popular-markets'>Popular markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/markets/popular'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1204,7 +1204,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </span></code></pre></div>
 <p>This endpoint retrieves the top 10 popular markets by volume.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/markets/popular</code></p>
+<p><code>GET https://api.sx.bet/markets/popular</code></p>
 <h3 id='response-format-3'>Response format</h3>
 <table><thead>
 <tr>
@@ -1226,7 +1226,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </tbody></table>
 
 <p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted</p>
-<h1 id='leagues'>Leagues</h1><h2 id='get-leagues'>Get leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/leagues'</span>
+<h1 id='leagues'>Leagues</h1><h2 id='get-leagues'>Get leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/leagues'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1295,7 +1295,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </span></code></pre></div>
 <p>This endpoint returns all the leagues supported by SportX</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/leagues</code></p>
+<p><code>GET https://api.sx.bet/leagues</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
 <table><thead>
 <tr>
@@ -1367,7 +1367,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>Instructions to the client of how to show the team names for markets in this league. <code>true</code> if the home team is <code>teamOneName</code>, <code>false</code> if the home team is <code>teamTwoName</code></td>
 </tr>
 </tbody></table>
-<h2 id='get-active-leagues'>Get active leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/leagues/active'</span>
+<h2 id='get-active-leagues'>Get active leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/leagues/active'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1473,7 +1473,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 Note that this endpoint is only updated every 10m.
 </aside>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/leagues/active</code></p>
+<p><code>GET https://api.sx.bet/leagues/active</code></p>
 <h3 id='query-parameters-2'>Query parameters</h3>
 <table><thead>
 <tr>
@@ -1492,7 +1492,7 @@ Note that this endpoint is only updated every 10m.
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
 <p>See <a href="#get-leagues">get leagues section</a> for how the response object is formatted. There is an additional field <code>eventsByType</code> which maps the number of unique events within a particular bet group (for example, <code>game-lines</code> or <code>outright-winner</code>).</p>
-<h2 id='get-league-teams'>Get league teams</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/leagues/teams/1'</span>
+<h2 id='get-league-teams'>Get league teams</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/leagues/teams/1'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1587,7 +1587,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint returns all the teams under a particular league</p>
 <h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/leagues/teams/:id</code></p>
+<p><code>GET https://api.sx.bet/leagues/teams/:id</code></p>
 <h3 id='request-parameters'>Request parameters</h3>
 <table><thead>
 <tr>
@@ -1649,7 +1649,7 @@ Note that this endpoint is only updated every 10m.
 <td>The name of this team</td>
 </tr>
 </tbody></table>
-<h1 id='sports'>Sports</h1><h2 id='get-sports'>Get sports</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/sports'</span>
+<h1 id='sports'>Sports</h1><h2 id='get-sports'>Get sports</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/sports'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1742,7 +1742,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint retrieves all sports available on the exchange</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/sports</code></p>
+<p><code>GET https://api.sx.bet/sports</code></p>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
@@ -1783,7 +1783,7 @@ Note that this endpoint is only updated every 10m.
 <td>The sport name</td>
 </tr>
 </tbody></table>
-<h1 id='fixtures'>Fixtures</h1><h2 id='get-fixtures'>Get fixtures</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/fixture/active?leagueId=2'</span>
+<h1 id='fixtures'>Fixtures</h1><h2 id='get-fixtures'>Get fixtures</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/fixture/active?leagueId=2'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1826,7 +1826,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint returns current active fixtures for a particular league. A fixture can also be thought of as an event and multiple markets are under a particular event. Note that this endpoint only returns fixtures that have a status of either <code>1</code>, <code>2</code>, <code>6</code>, <code>7</code>, <code>8</code>, or <code>9</code>. See <a href="#get-fixture-status">the status table in this section</a> for more details.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/fixture/active</code></p>
+<p><code>GET https://api.sx.bet/fixture/active</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
 <table><thead>
 <tr>
@@ -1923,7 +1923,7 @@ Note that this endpoint is only updated every 10m.
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='get-fixture-status'>Get fixture status</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/fixture/status'</span> <span class="se">\</span>
+<h2 id='get-fixture-status'>Get fixture status</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/fixture/status'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "sportXeventIds": ["L6217784"]
@@ -1941,7 +1941,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint returns the status of the passed event IDs.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/fixture/status</code></p>
+<p><code>POST https://api.sx.bet/fixture/status</code></p>
 <h3 id='request-payload'>Request payload</h3>
 <table><thead>
 <tr>
@@ -2033,7 +2033,7 @@ Note that this endpoint is only updated every 10m.
 <td>The event has not started but is about to. Note: this status will be shown up to 30 minutes before the event has started.</td>
 </tr>
 </tbody></table>
-<h1 id='trades'>Trades</h1><h2 id='get-active-trades'>Get active trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/trades'</span>
+<h1 id='trades'>Trades</h1><h2 id='get-active-trades'>Get active trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/trades'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -2122,7 +2122,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint retrieves past trades on the exchange split up by order. This is a paginated endpoint. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/trades</code></p>
+<p><code>POST https://api.sx.bet/trades</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -2313,7 +2313,7 @@ Note that this endpoint is only updated every 10m.
 <td>ISO formatted date string of when the trade was settled</td>
 </tr>
 </tbody></table>
-<h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/trades/consolidated'</span> <span class="se">\</span>
+<h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/trades/consolidated'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json''
 </span></code></pre></div>
 <blockquote>
@@ -2368,7 +2368,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint retrieves past consolidated trades on the exchange via pagination. If a trade fills multiple orders, it will show up as one entry here per bettor.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/trades/consolidated</code></p>
+<p><code>POST https://api.sx.bet/trades/consolidated</code></p>
 <h3 id='request-payload-parameters-2'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -2547,7 +2547,7 @@ Note that this endpoint is only updated every 10m.
 <td>With <code>settled=true</code>, this will be 0, 1, or 2 depending on the final outcome of the market</td>
 </tr>
 </tbody></table>
-<h1 id='live-scores'>Live scores</h1><h2 id='get-live-scores'>Get live scores</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/live-scores'</span> <span class="se">\</span>
+<h1 id='live-scores'>Live scores</h1><h2 id='get-live-scores'>Get live scores</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/live-scores'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span>
 </code></pre></div>
 <blockquote>
@@ -2623,7 +2623,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint retrieves live scores for a particular event ID.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/live-scores</code></p>
+<p><code>POST https://api.sx.bet/live-scores</code></p>
 <h3 id='request-payload'>Request payload</h3>
 <table><thead>
 <tr>
@@ -2750,7 +2750,7 @@ Up to 50 event IDs can be supplied at a time.
 <td>The score of team two in this period</td>
 </tr>
 </tbody></table>
-<h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/metadata'</span>
+<h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/metadata'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this</p>
@@ -2808,7 +2808,7 @@ Up to 50 event IDs can be supplied at a time.
 </span></code></pre></div>
 <p>This endpoint retrieves metadata on the exchange itself and useful parameters to interact with the exchange.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/metadata</code></p>
+<p><code>GET https://api.sx.bet/metadata</code></p>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
@@ -2878,7 +2878,7 @@ Up to 50 event IDs can be supplied at a time.
 <td>All time total volume on the exchange</td>
 </tr>
 </tbody></table>
-<h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders'</span>
+<h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this</p>
@@ -2939,7 +2939,7 @@ Up to 50 event IDs can be supplied at a time.
 </span></code></pre></div>
 <p>This endpoint returns active orders on the exchange based on a few parameters</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/orders</code></p>
+<p><code>POST https://api.sx.bet/orders</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -3091,7 +3091,7 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
 <aside class="notice">
 Your assets must be on polygon to place or fill orders via the API.
 </aside>
-<h2 id='post-a-new-order'>Post a new order</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/new'</span> <span class="se">\</span>
+<h2 id='post-a-new-order'>Post a new order</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/new'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "orders": [
@@ -3164,7 +3164,7 @@ Your assets must be on polygon to place or fill orders via the API.
 
 <span class="kd">const</span> <span class="nx">signedOrder</span> <span class="o">=</span> <span class="p">{</span> <span class="p">...</span><span class="nx">order</span><span class="p">,</span> <span class="nx">signature</span> <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://app.api.sportx.bet/orders/new</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/orders/new</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="na">orders</span><span class="p">:</span> <span class="p">[</span><span class="nx">signedOrder</span><span class="p">]</span> <span class="p">}),</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
@@ -3196,7 +3196,7 @@ If the API finds that your balance is consistently below your total exposure req
 
 <p>To offer bets on sportx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a>.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/orders/new</code></p>
+<p><code>POST https://api.sx.bet/orders/new</code></p>
 <h3 id='request-payload-parameters-2'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -3311,7 +3311,7 @@ The address in the <code>maker</code> field must match the account being used to
 <aside class="notice">
 Note that <code>totalBetSize</code> is from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker (you) will be putting into the pot if the order was fully filled. This is the maximum amount you will risk.
 </aside>
-<h2 id='cancel-individual-orders'>Cancel individual orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/cancel/v2'</span> <span class="se">\</span>
+<h2 id='cancel-individual-orders'>Cancel individual orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/cancel/v2'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "orderHashes": [
@@ -3376,7 +3376,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   <span class="nx">timestamp</span><span class="p">,</span>
 <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://app.api.sportx.bet/orders/cancel/v2</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/orders/cancel/v2</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
@@ -3398,7 +3398,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
 </aside>
 <h3 id='http-request-3'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/orders/cancel/v2</code></p>
+<p><code>POST https://api.sx.bet/orders/cancel/v2</code></p>
 <h3 id='request-payload-parameters-3'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -3463,7 +3463,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 <td>How many orders were cancelled, of the orders passed</td>
 </tr>
 </tbody></table>
-<h2 id='cancel-event-orders'>Cancel event orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/cancel/event'</span> <span class="se">\</span>
+<h2 id='cancel-event-orders'>Cancel event orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/cancel/event'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "sportXeventId": "L1234123",
@@ -3535,7 +3535,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
   <span class="nx">timestamp</span><span class="p">,</span>
 <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://app.api.sportx.bet/orders/cancel/v2</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/orders/cancel/v2</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
@@ -3557,7 +3557,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
 </aside>
 <h3 id='http-request-4'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/orders/cancel/event</code></p>
+<p><code>POST https://api.sx.bet/orders/cancel/event</code></p>
 <h3 id='request-payload-parameters-4'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -3622,7 +3622,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 <td>How many orders were cancelled, of the orders passed</td>
 </tr>
 </tbody></table>
-<h2 id='cancel-all-orders'>Cancel all orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/cancel/all'</span> <span class="se">\</span>
+<h2 id='cancel-all-orders'>Cancel all orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/cancel/all'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "signature": "0x1763cb98a069657cb778fdc295eac48741b957bfe58e54f7f9ad03c6c1ca3d053d9ca2e6957af794991217752b69cb9aa4ac9330395c92e24c8c25ec19220e5a1b",
@@ -3642,11 +3642,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">);</span>
 
-<span class="kd">function</span> <span class="nx">getCancelAllOrdersEIP712Payload</span><span class="p">(</span>
-  <span class="nx">salt</span><span class="p">,</span>
-  <span class="nx">timestamp</span><span class="p">,</span>
-  <span class="nx">chainId</span>
-<span class="p">)</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nx">getCancelAllOrdersEIP712Payload</span><span class="p">(</span><span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">chainId</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">types</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
@@ -3669,12 +3665,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
   <span class="k">return</span> <span class="nx">payload</span><span class="p">;</span>
 <span class="p">}</span>
 
-
-<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span>
-  <span class="nx">salt</span><span class="p">,</span>
-  <span class="nx">timestamp</span><span class="p">,</span>
-  <span class="mi">137</span>
-<span class="p">);</span>
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span><span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="mi">137</span><span class="p">);</span>
 
 <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
@@ -3688,7 +3679,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
   <span class="nx">timestamp</span><span class="p">,</span>
 <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://app.api.sportx.bet/orders/cancel/all</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/orders/cancel/all</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
@@ -3710,7 +3701,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
 </aside>
 <h3 id='http-request-5'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/orders/cancel/all</code></p>
+<p><code>POST https://api.sx.bet/orders/cancel/all</code></p>
 <h3 id='request-payload-parameters-5'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -3769,7 +3760,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 <td>How many orders were cancelled, of the orders passed</td>
 </tr>
 </tbody></table>
-<h2 id='filling-orders'>Filling orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://app.api.sportx.bet/orders/fill'</span> <span class="se">\</span>
+<h2 id='filling-orders'>Filling orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/fill'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{"orderHashes":["0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de","0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a"],"takerAmounts":["10000000000000000000","10000000000000000000"],"taker":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","takerSig":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c","fillSalt":"69231297238279245345865414293427982207908612843136003245427437324972455931243","action":"N/A","market":"N/A","betting":"N/A","stake":"N/A","odds":"N/A","returning":"N/A"}'</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
@@ -4037,7 +4028,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
     <span class="p">},</span>
   <span class="p">};</span>
 
-  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s2">`https://app.api.sportx.bet/orders/fill`</span><span class="p">,</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="s2">`https://api.sx.bet/orders/fill`</span><span class="p">,</span> <span class="p">{</span>
     <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
     <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
@@ -4068,7 +4059,7 @@ Your assets must be on Polygon to place bets.
 Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
 </aside>
 <h3 id='http-request-6'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/orders/fill</code></p>
+<p><code>POST https://api.sx.bet/orders/fill</code></p>
 <h3 id='request-payload-parameters-6'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -4243,7 +4234,7 @@ Note that <code>fillAmounts</code> are from *the perspective of the market maker
 <aside class="notice">
 To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
-<h1 id='bridging'>Bridging</h1><h2 id='fast-withdraw'>Fast withdraw</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'http://app.api.sportx.bet/bridge/fast-exit/lock'</span> <span class="se">\</span>
+<h1 id='bridging'>Bridging</h1><h2 id='fast-withdraw'>Fast withdraw</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'http://api.sx.bet/bridge/fast-exit/lock'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{"owner":"0x92B1BE018E7Ef135838dF996F0c0e4cFaafe8c8F","spender":"0xC1b6dA1545D81684D4cf08A999B099f52C828E51","tokenAddress":"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063","amount":"100000000000000000000","signature":"0xef8c1293c948bf1fd9ecc81003b6190f6e006fd2d746fcd9c9e8d29ce08d364c1884272d183b5792d275fa624408f372df742b15d143ffc90fd8c0fe179763031b"}'</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">BigNumber</span><span class="p">,</span> <span class="nx">Contract</span><span class="p">,</span> <span class="nx">providers</span><span class="p">,</span> <span class="nx">utils</span><span class="p">,</span> <span class="nx">Wallet</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
@@ -4254,7 +4245,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">fastExit</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="o">!</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">tokenAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_ADDRESS</span><span class="o">!</span><span class="p">;</span>
-  <span class="kd">const</span> <span class="nx">fastExitSpenderAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">FAST_EXIT_SPENDER_ADDRESS</span><span class="p">;</span> <span class="c1">// See the request payload for what this should be </span>
+  <span class="kd">const</span> <span class="nx">fastExitSpenderAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">FAST_EXIT_SPENDER_ADDRESS</span><span class="p">;</span> <span class="c1">// See the request payload for what this should be</span>
   <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">withdrawAmount</span> <span class="o">=</span> <span class="nx">parseUnits</span><span class="p">(</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span> <span class="mi">18</span><span class="p">);</span>
   <span class="c1">// Note that because this transaction is executing on polygon, you must pass a JSON-RPC endpoint for Polygon, not Ethereum mainnet.</span>
@@ -4379,7 +4370,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
   <span class="c1">// log.info("------- fastExit payload", inspect(payload));</span>
 
   <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span>
-    <span class="dl">"</span><span class="s2">https://app.api.sportx.bet/bridge/fast-exit/lock</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">https://api.sx.bet/bridge/fast-exit/lock</span><span class="dl">"</span><span class="p">,</span>
     <span class="p">{</span>
       <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
       <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">),</span>
@@ -4392,10 +4383,8 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <p>The above command returns JSON structured like this</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w"> </span><span class="p">}</span><span class="w">
-
-
 </span></code></pre></div>
-<p>This endpoint allows users to bridge assets from Polygon to Ethereum mainnet in an instant and trust-minimized manner. A fee is charged in-kind on the transaction, meaning that you are charged a dollar amount worth of the token you are withdrawing as payment for the decreased transaction time. For example if you withdraw $1000 DAI and the fee is $50, you will receive $950 DAI on Ethereum mainnet. Therefore, this is an effective minimum on the withdraw amount. Please see <a href="#fast-withdraw-fees">the fee section</a> for what this fee is currently set it. </p>
+<p>This endpoint allows users to bridge assets from Polygon to Ethereum mainnet in an instant and trust-minimized manner. A fee is charged in-kind on the transaction, meaning that you are charged a dollar amount worth of the token you are withdrawing as payment for the decreased transaction time. For example if you withdraw $1000 DAI and the fee is $50, you will receive $950 DAI on Ethereum mainnet. Therefore, this is an effective minimum on the withdraw amount. Please see <a href="#fast-withdraw-fees">the fee section</a> for what this fee is currently set it.</p>
 
 <p>Transactions are usually processed within a minute compared to ~45m on the official Polygon bridge, but might be longer if Polygon is significantly clogged.</p>
 
@@ -4403,7 +4392,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 Attempting to withdraw less than the fee amount will not work and you will receive $0 on Ethereum mainnet. 
 </aside>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://app.api.sportx.bet/bridge/fast-exit/lock</code></p>
+<p><code>POST https://api.sx.bet/bridge/fast-exit/lock</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -4622,7 +4611,7 @@ Attempting to withdraw less than the fee amount will not work and you will recei
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">realtime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
-    <span class="na">authUrl</span><span class="p">:</span> <span class="s2">`https://app.api.sportx.bet/user/token`</span><span class="p">,</span>
+    <span class="na">authUrl</span><span class="p">:</span> <span class="s2">`https://api.sx.bet/user/token`</span><span class="p">,</span>
   <span class="p">});</span>
   <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="k">void</span><span class="o">&gt;</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">realtime</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -5156,7 +5145,7 @@ You only need one instance of the <code>ably</code> object to connect to the API
 <p>Note that the messages are sent in batches in an array. If you receive two updates for the same <code>orderHash</code> within an update, you can order them by <code>updateTime</code> after converting the <code>updateTime</code> to a BigInt or BigNumber.</p>
 <h1 id='affiliate'>Affiliate</h1>
 <p>You can become an affiliate of sportx.bet and participate in fee sharing. You&#39;ll be able to hook into our market resolution and liquidity using thiis API. Please <a href="mailto:contact@sportx.bet">contact us</a> if you are interested in working with us. We would love to hear from you!</p>
-<h2 id='get-affiliate-users'>Get affiliate users</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://app.api.sportx.bet/affiliate/users'</span>
+<h2 id='get-affiliate-users'>Get affiliate users</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/affiliate/users'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -5168,7 +5157,7 @@ You only need one instance of the <code>ably</code> object to connect to the API
 </span></code></pre></div>
 <p>This endpoint retrieves all users registered under a particular affiliate.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>GET https://app.api.sportx.bet/affiliate/users</code></p>
+<p><code>GET https://api.sx.bet/affiliate/users</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
 <table><thead>
 <tr>
