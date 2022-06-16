@@ -2192,6 +2192,12 @@ Note that this endpoint is only updated every 10m.
 <td>string</td>
 <td>Used for pagination. Pass the <code>nextKey</code> returned from the previous request to retrieve the next set of records.</td>
 </tr>
+<tr>
+<td>tradeStatus</td>
+<td>false</td>
+<td>string</td>
+<td>Filter trades to see only those with <code>SUCCESS</code> or <code>FAILED</code> status&#39;</td>
+</tr>
 </tbody></table>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
@@ -2295,7 +2301,7 @@ Note that this endpoint is only updated every 10m.
 <tr>
 <td>tradeStatus</td>
 <td>string</td>
-<td><code>SUCCESS</code> or <code>FAILURE</code> depending on if this trade succeeded or not</td>
+<td><code>SUCCESS</code> or <code>FAILED</code> depending on if this trade succeeded or not</td>
 </tr>
 <tr>
 <td>valid</td>
@@ -2426,6 +2432,12 @@ Note that this endpoint is only updated every 10m.
 <td>string</td>
 <td>Only gets trades for this event ID</td>
 </tr>
+<tr>
+<td>tradeStatus</td>
+<td>false</td>
+<td>string</td>
+<td>Filter trades to see only those with <code>SUCCESS</code> or <code>FAILED</code> status&#39;</td>
+</tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
 <table><thead>
@@ -2474,7 +2486,7 @@ Note that this endpoint is only updated every 10m.
 <tr>
 <td>tradeStatus</td>
 <td>string</td>
-<td><code>SUCCESS</code> or <code>FAILURE</code> depending on if this trade succeeded or not</td>
+<td><code>SUCCESS</code> or <code>FAILED</code> depending on if this trade succeeded or not</td>
 </tr>
 <tr>
 <td>bettor</td>
@@ -4890,7 +4902,8 @@ You only need one instance of the <code>ably</code> object to connect to the API
   </span><span class="nl">"settled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
   </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x027f3237d9dc9dfa6068b60d852c3e9727768683a8c43b2e1a436029f0de924e"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Subscribe to all trade updates on the exchange. You will receive updates when a trade is settled or a new trade is placed.</p>
