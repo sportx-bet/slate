@@ -495,13 +495,13 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Be your own bookmaker or fill orders programmatically with the SX.bet API!</p>
+<p>Be your own bookmaker or fill orders programmatically with the SportX API!</p>
 
 <p>Questions? <a href="https://discord.gg/xXUynCX">Join our chat</a></p>
 
 <p>We support betting in USDC, WETH, and WSX</p>
 
-<p>DEPRECATED: If you wish to use our wrapper for javascript you can do so <a href="https://github.com/sportx-bet/sportx-js">here</a></p>
+<p>If you wish to use our wrapper for javascript you can do so <a href="https://github.com/sportx-bet/sportx-js">here</a></p>
 
 <table><thead>
 <tr>
@@ -529,9 +529,9 @@
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
 <h1 id='api-key'>API Key</h1>
-<p>In order to use the SX.bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.</p>
+<p>In order to use the SportX API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.</p>
 
-<p>Some users may require higher rate limits for their application. SX.bet provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.</p>
+<p>Some users may require higher rate limits for their application. SportX provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.</p>
 <h2 id='generating-api-key'>Generating API Key</h2>
 <ol>
 <li>Visit <a href='https://sx.bet'>sx.bet</a> and register/login to your account. You can connect your MetaMask wallet, or login using your Fortmatic email address.</li>
@@ -974,35 +974,35 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </tr>
 <tr>
 <td>202</td>
-<td>First Period Winner</td>
+<td>First Set Winner</td>
 <td>false</td>
 <td>N/A</td>
-<td>Who will win the 1st Period Home/Away</td>
-<td>first-period-lines</td>
+<td>Who will win the 1st set</td>
+<td>first-set</td>
 </tr>
 <tr>
 <td>203</td>
-<td>Second Period Winner</td>
+<td>Second Set Winner</td>
 <td>false</td>
 <td>N/A</td>
-<td>Who will win the 2nd Period Home/Away</td>
-<td>second-period-lines</td>
+<td>Who will win the 2nd set</td>
+<td>second-set</td>
 </tr>
 <tr>
 <td>204</td>
-<td>Third Period Winner</td>
+<td>Third Set Winner</td>
 <td>false</td>
 <td>N/A</td>
-<td>Who will win the 3rd Period Home/Away</td>
-<td>third-period-lines</td>
+<td>Who will win the 3rd set</td>
+<td>third-set</td>
 </tr>
 <tr>
 <td>205</td>
-<td>Fourth Period Winner</td>
+<td>Fourth Set Winner</td>
 <td>false</td>
 <td>N/A</td>
-<td>Who will win the 4th Period Home/Away</td>
-<td>fourth-period-lines</td>
+<td>Who will win the 4th set</td>
+<td>fourth-set</td>
 </tr>
 <tr>
 <td>866</td>
@@ -1029,30 +1029,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>first-half-lines</td>
 </tr>
 <tr>
-<td>64</td>
-<td>Asian Handicap First Period</td>
-<td>true</td>
-<td>N/A</td>
-<td>Who will win the 1st period with handicap (no draw)</td>
-<td>first-period-lines</td>
-</tr>
-<tr>
-<td>65</td>
-<td>Asian Handicap Second Period</td>
-<td>true</td>
-<td>N/A</td>
-<td>Who will win the 2nd period with handicap (no draw)</td>
-<td>second-period-lines</td>
-</tr>
-<tr>
-<td>66</td>
-<td>Asian Handicap Third Period</td>
-<td>true</td>
-<td>N/A</td>
-<td>Who will win the 3rd period with handicap (no draw)</td>
-<td>third-period-lines</td>
-</tr>
-<tr>
 <td>63</td>
 <td>12 Halftime</td>
 <td>false</td>
@@ -1067,54 +1043,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>N/A</td>
 <td>Will the score in the 1st half be under/over a specific line</td>
 <td>first-half-lines</td>
-</tr>
-<tr>
-<td>21</td>
-<td>Under/Over First Period</td>
-<td>true</td>
-<td>N/A</td>
-<td>Will the score in the 1st period be under/over a specific line</td>
-<td>first-period-lines</td>
-</tr>
-<tr>
-<td>45</td>
-<td>Under/Over Second Period</td>
-<td>true</td>
-<td>N/A</td>
-<td>Will the score in the 2nd period be under/over a specific line</td>
-<td>second-period-lines</td>
-</tr>
-<tr>
-<td>46</td>
-<td>Under/Over Third Period</td>
-<td>true</td>
-<td>N/A</td>
-<td>Will the score in the 3rd period be under/over a specific line</td>
-<td>third-period-lines</td>
-</tr>
-<tr>
-<td>281</td>
-<td>1st Five Innings Asian handicap</td>
-<td>true</td>
-<td>N/A</td>
-<td>Who will win the 1st five innings with handicap (no draw)</td>
-<td>first-five-innings</td>
-</tr>
-<tr>
-<td>1618</td>
-<td>1st 5 Innings Winner-12</td>
-<td>false</td>
-<td>N/A</td>
-<td>Who will win in the 1st five innings</td>
-<td>first-five-innings</td>
-</tr>
-<tr>
-<td>236</td>
-<td>1st 5 Innings  Under/Over</td>
-<td>true</td>
-<td>N/A</td>
-<td>Will the score in the 1st five innings be under/over a specific line</td>
-<td>first-five-innings</td>
 </tr>
 </tbody></table>
 
@@ -1369,7 +1297,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint returns all the leagues supported by SX.bet</p>
+<p>This endpoint returns all the leagues supported by SportX</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/leagues</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
@@ -1435,7 +1363,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <tr>
 <td>active</td>
 <td>boolean</td>
-<td>Whether or not the league is active on SX.bet currently</td>
+<td>Whether or not the league is active on SportX currently</td>
 </tr>
 <tr>
 <td>homeTeamFirst</td>
@@ -2878,8 +2806,7 @@ Up to 50 event IDs can be supplied at a time.
     </span><span class="nl">"domainVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4.0"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"EIP712FillHasher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E96B0a25d51e3Cc89C557f152797c33B839968f"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"TokenTransferProxy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"bridgeFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"oddsLadderStepSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="w">
+    </span><span class="nl">"bridgeFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -2963,11 +2890,6 @@ Up to 50 event IDs can be supplied at a time.
 <td>bridgeFee</td>
 <td>number</td>
 <td>USD fee for bridge transaction from Polygon to SX Network</td>
-</tr>
-<tr>
-<td>oddsLadderStepSize</td>
-<td>number</td>
-<td>Odds ladder step size. See <a href="#post-a-new-order">the post a new order section</a></td>
 </tr>
 </tbody></table>
 <h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders'</span>
@@ -3262,47 +3184,38 @@ Your assets must be on SX Network to place or fill orders via the API.
 
 <span class="c1">// Odds ladder testing</span>
 
+<span class="k">import</span> <span class="p">{</span> <span class="nx">PERCENTAGE_PRECISION_EXPONENT</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@betx/sportx-contracts</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BigNumber</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">bignumber.js</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BigNumber</span> <span class="k">as</span> <span class="nx">EthBigNumber</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
-
-<span class="k">export</span> <span class="kd">const</span> <span class="nx">ODDS_LADDER_STEP_SIZE</span> <span class="o">=</span> <span class="mf">2.5</span><span class="p">;</span> <span class="c1">// (0.1% = 1, 0.5% = 5, etc)</span>
 
 <span class="cm">/**
  * Check if the odds are valid, i.e., in one of the allowed steps
  * @param odds Odds to check
  */</span>
-<span class="k">export</span> <span class="kd">function</span> <span class="nx">checkOddsLadderValid</span><span class="p">(</span>
-  <span class="nx">odds</span><span class="p">:</span> <span class="nx">EthBigNumber</span><span class="p">,</span>
-  <span class="nx">stepSizeOverride</span><span class="p">?:</span> <span class="kr">number</span>
-<span class="p">)</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">checkOddsLadderValid</span><span class="p">(</span><span class="nx">odds</span><span class="p">:</span> <span class="nx">EthBigNumber</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// Logic:</span>
   <span class="c1">// 100% = 10^20</span>
   <span class="c1">// 10% = 10^19</span>
   <span class="c1">// 1% = 10^18</span>
   <span class="c1">// 0.1% = 10^17</span>
-  <span class="k">return</span> <span class="nx">odds</span>
-    <span class="p">.</span><span class="nx">mod</span><span class="p">(</span>
-      <span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">ODDS_LADDER_STEP_SIZE</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">odds</span><span class="p">.</span><span class="nx">mod</span><span class="p">(</span><span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">pow</span><span class="p">(</span><span class="mi">17</span><span class="p">)).</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="cm">/**
- * Rounds odds to the nearest step.
+ * Rounds odds to the nearest step. If you're examining maker odds, a higher implied is better for the maker, so you should want to round up
  * @param odds Odds to round.
+ * @param equidistantRoundUp If true, round up at equidistant (0.5 -&gt; 1). Default true.
  */</span>
-<span class="k">export</span> <span class="kd">function</span> <span class="nx">roundDownOddsToNearestStep</span><span class="p">(</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">roundOddsToNearestStep</span><span class="p">(</span>
   <span class="nx">odds</span><span class="p">:</span> <span class="nx">EthBigNumber</span><span class="p">,</span>
-  <span class="nx">stepSizeOverride</span><span class="p">?:</span> <span class="kr">number</span>
+  <span class="nx">equidistantRoundUp</span><span class="p">:</span> <span class="nx">boolean</span> <span class="o">=</span> <span class="kc">true</span>
 <span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">step</span> <span class="o">=</span> <span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">mul</span><span class="p">(</span><span class="nx">ODDS_LADDER_STEP_SIZE</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">step</span> <span class="o">=</span> <span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">pow</span><span class="p">(</span><span class="mi">17</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">bnStep</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BigNumber</span><span class="p">(</span><span class="nx">step</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
   <span class="kd">const</span> <span class="nx">bnOdds</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BigNumber</span><span class="p">(</span><span class="nx">odds</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-  <span class="kd">const</span> <span class="nx">firstPassDivision</span> <span class="o">=</span> <span class="nx">bnOdds</span><span class="p">.</span><span class="nx">dividedBy</span><span class="p">(</span><span class="nx">bnStep</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">firstPassDivision</span> <span class="o">=</span> <span class="nx">bnOdds</span>
+    <span class="p">.</span><span class="nx">dividedBy</span><span class="p">(</span><span class="nx">bnStep</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">equidistantRoundUp</span> <span class="p">?</span> <span class="mi">4</span> <span class="p">:</span> <span class="mi">5</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">firstPassDivision</span><span class="p">).</span><span class="nx">mul</span><span class="p">(</span><span class="nx">step</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -3332,9 +3245,7 @@ If the API finds that your balance is consistently below your total exposure req
 
 <p>To offer bets on sx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a>.</p>
 
-<p>We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.25%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 2.5 * 10 ^ 17 and checking if it&#39;s equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.</p>
-
-<p>You can get the current interval from <code>GET /metadata</code>. It will spit out a number from 10 to 100, where 10 = 0.10%, and 25 = 0.25%</p>
+<p>We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.1%, meaning that your offer cannot fall between the steps. An offer of 50.1% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 10 ^ 17 and checking if it&#39;s equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.</p>
 
 <aside class="warning">
 Odds not on the ladder will be rejected and your order(s) will not be posted. 
@@ -4373,7 +4284,7 @@ Note that <code>fillAmounts</code> are from *the perspective of the market maker
 To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
 <h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
-<p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 * 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SX.bet and their associated decimals value</p>
+<p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 * 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value</p>
 
 <table><thead>
 <tr>
@@ -4388,12 +4299,12 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <td>6</td>
 </tr>
 <tr>
-<td>WETH</td>
+<td>DAI</td>
 <td>See <code>https://api.sx.bet/metadata</code> for address</td>
 <td>18</td>
 </tr>
 <tr>
-<td>WSX</td>
+<td>WETH</td>
 <td>See <code>https://api.sx.bet/metadata</code> for address</td>
 <td>18</td>
 </tr>
