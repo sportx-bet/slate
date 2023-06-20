@@ -495,13 +495,13 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Be your own bookmaker or fill orders programmatically with the SportX API!</p>
+<p>Be your own bookmaker or fill orders programmatically with the SX.bet API!</p>
 
-<p>Questions? <a href="https://discord.gg/xXUynCX">Join our chat</a></p>
+<p>Technical questions or need support? <a href="mailto:api-support@sx.bet">Send us an e-mail</a>. </p>
 
 <p>We support betting in USDC, WETH, and WSX</p>
 
-<p>If you wish to use our wrapper for javascript you can do so <a href="https://github.com/sportx-bet/sportx-js">here</a></p>
+<p>DEPRECATED: If you wish to use our wrapper for javascript you can do so <a href="https://github.com/sportx-bet/sportx-js">here</a></p>
 
 <table><thead>
 <tr>
@@ -529,9 +529,9 @@
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
 <h1 id='api-key'>API Key</h1>
-<p>In order to use the SportX API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.</p>
+<p>In order to use the SX.bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.</p>
 
-<p>Some users may require higher rate limits for their application. SportX provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.</p>
+<p>Some users may require higher rate limits for their application. SX.bet provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.</p>
 <h2 id='generating-api-key'>Generating API Key</h2>
 <ol>
 <li>Visit <a href='https://sx.bet'>sx.bet</a> and register/login to your account. You can connect your MetaMask wallet, or login using your Fortmatic email address.</li>
@@ -863,16 +863,21 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <th>ID</th>
 <th>Name</th>
 <th>Has Lines</th>
-<th>Legacy ID</th>
 <th>Description</th>
 <th>Bet Group</th>
 </tr>
 </thead><tbody>
 <tr>
+<td>1</td>
+<td>1X2</td>
+<td>false</td>
+<td>Who will win the game (1X2)</td>
+<td>1X2</td>
+</tr>
+<tr>
 <td>52</td>
 <td>12</td>
 <td>false</td>
-<td>MONEY_LINE</td>
 <td>Who will win the game</td>
 <td>game-lines</td>
 </tr>
@@ -880,7 +885,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>88</td>
 <td>To Qualify</td>
 <td>false</td>
-<td>MONEY_LINE</td>
 <td>Which team will qualify</td>
 <td>game-lines</td>
 </tr>
@@ -888,7 +892,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>226</td>
 <td>12 Including Overtime</td>
 <td>false</td>
-<td>MONEY_LINE</td>
 <td>Who will win the game including overtime (no draw)</td>
 <td>game-lines</td>
 </tr>
@@ -896,7 +899,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>3</td>
 <td>Asian Handicap</td>
 <td>true</td>
-<td>SPREAD</td>
 <td>Who will win the game with handicap (no draw)</td>
 <td>game-lines</td>
 </tr>
@@ -904,7 +906,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>201</td>
 <td>Asian Handicap Games</td>
 <td>true</td>
-<td>SPREAD</td>
 <td>Who will win more games with handicap (no draw)</td>
 <td>game-lines</td>
 </tr>
@@ -912,7 +913,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>342</td>
 <td>Asian Handicap Including Overtime</td>
 <td>true</td>
-<td>SPREAD</td>
 <td>Who will win the game with handicap (no draw) including Overtime</td>
 <td>game-lines</td>
 </tr>
@@ -920,7 +920,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>2</td>
 <td>Under/Over</td>
 <td>true</td>
-<td>OVER_UNDER</td>
 <td>Will the score be under/over a specific line</td>
 <td>game-lines</td>
 </tr>
@@ -928,7 +927,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>835</td>
 <td>Asian Under/Over</td>
 <td>true</td>
-<td>OVER_UNDER</td>
 <td>Will the score be under/over specific asian line</td>
 <td>game-lines</td>
 </tr>
@@ -936,7 +934,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>28</td>
 <td>Under/Over Including Overtime</td>
 <td>true</td>
-<td>OVER_UNDER</td>
 <td>Will the score including overtime be over/under a specific line</td>
 <td>game-lines</td>
 </tr>
@@ -944,7 +941,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>29</td>
 <td>Under/Over Rounds</td>
 <td>true</td>
-<td>OVER_UNDER</td>
 <td>Will the number of rounds in the match will be under/over a specific line</td>
 <td>game-lines</td>
 </tr>
@@ -952,7 +948,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>166</td>
 <td>Under/Over Games</td>
 <td>true</td>
-<td>OVER_UNDER</td>
 <td>Number of games will be under/over a specific line</td>
 <td>game-lines</td>
 </tr>
@@ -960,7 +955,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>1536</td>
 <td>Under/Over Maps</td>
 <td>true</td>
-<td>OVER_UNDER</td>
 <td>Will the number of maps be under/over a specific line</td>
 <td>game-lines</td>
 </tr>
@@ -968,47 +962,41 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>274</td>
 <td>Outright Winner</td>
 <td>false</td>
-<td>OUTRIGHT_WINNER</td>
 <td>Winner of a tournament, not a single match</td>
 <td>outright-winner</td>
 </tr>
 <tr>
 <td>202</td>
-<td>First Set Winner</td>
+<td>First Period Winner</td>
 <td>false</td>
-<td>N/A</td>
-<td>Who will win the 1st set</td>
-<td>first-set</td>
+<td>Who will win the 1st Period Home/Away</td>
+<td>first-period-lines</td>
 </tr>
 <tr>
 <td>203</td>
-<td>Second Set Winner</td>
+<td>Second Period Winner</td>
 <td>false</td>
-<td>N/A</td>
-<td>Who will win the 2nd set</td>
-<td>second-set</td>
+<td>Who will win the 2nd Period Home/Away</td>
+<td>second-period-lines</td>
 </tr>
 <tr>
 <td>204</td>
-<td>Third Set Winner</td>
+<td>Third Period Winner</td>
 <td>false</td>
-<td>N/A</td>
-<td>Who will win the 3rd set</td>
-<td>third-set</td>
+<td>Who will win the 3rd Period Home/Away</td>
+<td>third-period-lines</td>
 </tr>
 <tr>
 <td>205</td>
-<td>Fourth Set Winner</td>
+<td>Fourth Period Winner</td>
 <td>false</td>
-<td>N/A</td>
-<td>Who will win the 4th set</td>
-<td>fourth-set</td>
+<td>Who will win the 4th Period Home/Away</td>
+<td>fourth-period-lines</td>
 </tr>
 <tr>
 <td>866</td>
 <td>Set Spread</td>
 <td>true</td>
-<td>N/A</td>
 <td>Which team/player will win more sets with handicap</td>
 <td>set-betting</td>
 </tr>
@@ -1016,7 +1004,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>165</td>
 <td>Set Total</td>
 <td>true</td>
-<td>N/A</td>
 <td>Number of sets will be under/over a specific line</td>
 <td>set-betting</td>
 </tr>
@@ -1024,15 +1011,34 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>53</td>
 <td>Asian Handicap Halftime</td>
 <td>true</td>
-<td>N/A</td>
 <td>Who will win the 1st half with handicap (no draw)</td>
 <td>first-half-lines</td>
+</tr>
+<tr>
+<td>64</td>
+<td>Asian Handicap First Period</td>
+<td>true</td>
+<td>Who will win the 1st period with handicap (no draw)</td>
+<td>first-period-lines</td>
+</tr>
+<tr>
+<td>65</td>
+<td>Asian Handicap Second Period</td>
+<td>true</td>
+<td>Who will win the 2nd period with handicap (no draw)</td>
+<td>second-period-lines</td>
+</tr>
+<tr>
+<td>66</td>
+<td>Asian Handicap Third Period</td>
+<td>true</td>
+<td>Who will win the 3rd period with handicap (no draw)</td>
+<td>third-period-lines</td>
 </tr>
 <tr>
 <td>63</td>
 <td>12 Halftime</td>
 <td>false</td>
-<td>N/A</td>
 <td>Who will win the 1st half (no draw)</td>
 <td>first-half-lines</td>
 </tr>
@@ -1040,18 +1046,55 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>77</td>
 <td>Under/Over Halftime</td>
 <td>true</td>
-<td>N/A</td>
 <td>Will the score in the 1st half be under/over a specific line</td>
 <td>first-half-lines</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Under/Over First Period</td>
+<td>true</td>
+<td>Will the score in the 1st period be under/over a specific line</td>
+<td>first-period-lines</td>
+</tr>
+<tr>
+<td>45</td>
+<td>Under/Over Second Period</td>
+<td>true</td>
+<td>Will the score in the 2nd period be under/over a specific line</td>
+<td>second-period-lines</td>
+</tr>
+<tr>
+<td>46</td>
+<td>Under/Over Third Period</td>
+<td>true</td>
+<td>Will the score in the 3rd period be under/over a specific line</td>
+<td>third-period-lines</td>
+</tr>
+<tr>
+<td>281</td>
+<td>1st Five Innings Asian handicap</td>
+<td>true</td>
+<td>Who will win the 1st five innings with handicap (no draw)</td>
+<td>first-five-innings</td>
+</tr>
+<tr>
+<td>1618</td>
+<td>1st 5 Innings Winner-12</td>
+<td>false</td>
+<td>Who will win in the 1st five innings</td>
+<td>first-five-innings</td>
+</tr>
+<tr>
+<td>236</td>
+<td>1st 5 Innings Under/Over</td>
+<td>true</td>
+<td>Will the score in the 1st five innings be under/over a specific line</td>
+<td>first-five-innings</td>
 </tr>
 </tbody></table>
 
 <p>More types will be added continuously.</p>
-<h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/markets/find'</span> <span class="se">\</span>
-<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-<span class="nt">--data-raw</span> <span class="s1">'{
-    "marketHashes": ["0x3cba25f2253035b015b9bb555c1bf900f6737704d57425dd2a5b60e929c33b81"]
-}'</span>
+<h2 id='get-specific-markets'>Get specific markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/markets/find'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1088,7 +1131,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </span></code></pre></div>
 <p>This endpoint retrieves specific markets</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://api.sx.bet/markets/find</code></p>
+<p><code>GET https://api.sx.bet/markets/find</code></p>
 <h3 id='request-format'>Request format</h3>
 <table><thead>
 <tr>
@@ -1102,7 +1145,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>marketHashes</td>
 <td>true</td>
 <td>string[]</td>
-<td>The market hashes of the markets to retrieve. Maximum 50.</td>
+<td>The market hashes of the markets to retrieve. Maximum 50. Comma separated.</td>
 </tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
@@ -1297,7 +1340,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint returns all the leagues supported by SportX</p>
+<p>This endpoint returns all the leagues supported by SX.bet</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/leagues</code></p>
 <h3 id='query-parameters'>Query parameters</h3>
@@ -1363,7 +1406,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <tr>
 <td>active</td>
 <td>boolean</td>
-<td>Whether or not the league is active on SportX currently</td>
+<td>Whether or not the league is active on SX.bet currently</td>
 </tr>
 <tr>
 <td>homeTeamFirst</td>
@@ -1927,11 +1970,7 @@ Note that this endpoint is only updated every 10m.
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='get-fixture-status'>Get fixture status</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/fixture/status'</span> <span class="se">\</span>
-<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-<span class="nt">--data-raw</span> <span class="s1">'{
-    "sportXeventIds": ["L6217784"]
-}'</span>
+<h2 id='get-fixture-status'>Get fixture status</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/fixture/status'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -1945,7 +1984,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint returns the status of the passed event IDs.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://api.sx.bet/fixture/status</code></p>
+<p><code>GET https://api.sx.bet/fixture/status</code></p>
 <h3 id='request-payload'>Request payload</h3>
 <table><thead>
 <tr>
@@ -1959,7 +1998,7 @@ Note that this endpoint is only updated every 10m.
 <td>sportXeventIds</td>
 <td>true</td>
 <td>string[]</td>
-<td>An array of event IDs</td>
+<td>An array of event IDs (comma separated)</td>
 </tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
@@ -2037,7 +2076,7 @@ Note that this endpoint is only updated every 10m.
 <td>The event has not started but is about to. Note: this status will be shown up to 30 minutes before the event has started.</td>
 </tr>
 </tbody></table>
-<h1 id='trades'>Trades</h1><h2 id='get-active-trades'>Get active trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/trades'</span>
+<h1 id='trades'>Trades</h1><h2 id='get-active-trades'>Get active trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/trades'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -2126,7 +2165,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint retrieves past trades on the exchange split up by order. This is a paginated endpoint. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://api.sx.bet/trades</code></p>
+<p><code>GET https://api.sx.bet/trades</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -2164,7 +2203,7 @@ Note that this endpoint is only updated every 10m.
 <td>marketHashes</td>
 <td>false</td>
 <td>string[]</td>
-<td>Only get trades for particular markets</td>
+<td>Only get trades for particular markets. Comma separated</td>
 </tr>
 <tr>
 <td>baseToken</td>
@@ -2323,9 +2362,8 @@ Note that this endpoint is only updated every 10m.
 <td>ISO formatted date string of when the trade was settled</td>
 </tr>
 </tbody></table>
-<h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/trades/consolidated'</span> <span class="se">\</span>
-<span class="nt">--header</span> <span class="s1">'Content-Type: application/json''
-</span></code></pre></div>
+<h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/trades/consolidated'</span>
+</code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
@@ -2378,7 +2416,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint retrieves past consolidated trades on the exchange via pagination. If a trade fills multiple orders, it will show up as one entry here per bettor.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://api.sx.bet/trades/consolidated</code></p>
+<p><code>GET https://api.sx.bet/trades/consolidated</code></p>
 <h3 id='request-payload-parameters-2'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -2563,8 +2601,7 @@ Note that this endpoint is only updated every 10m.
 <td>With <code>settled=true</code>, this will be 0, 1, or 2 depending on the final outcome of the market</td>
 </tr>
 </tbody></table>
-<h1 id='live-scores'>Live scores</h1><h2 id='get-live-scores'>Get live scores</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/live-scores'</span> <span class="se">\</span>
-<span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span>
+<h1 id='live-scores'>Live scores</h1><h2 id='get-live-scores'>Get live scores</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/live-scores'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
@@ -2639,7 +2676,7 @@ Note that this endpoint is only updated every 10m.
 </span></code></pre></div>
 <p>This endpoint retrieves live scores for a particular event ID.</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://api.sx.bet/live-scores</code></p>
+<p><code>GET https://api.sx.bet/live-scores</code></p>
 <h3 id='request-payload'>Request payload</h3>
 <table><thead>
 <tr>
@@ -2801,12 +2838,12 @@ Up to 50 event IDs can be supplied at a time.
         </span><span class="nl">"WSX"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaa99bE3356a11eE92c3f099BD7a038399633566f"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">},</span><span class="w">
-    </span><span class="nl">"bettingEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
     </span><span class="nl">"totalVolume"</span><span class="p">:</span><span class="w"> </span><span class="mf">214120305.80276245</span><span class="p">,</span><span class="w">
     </span><span class="nl">"domainVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4.0"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"EIP712FillHasher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3E96B0a25d51e3Cc89C557f152797c33B839968f"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"TokenTransferProxy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"bridgeFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+    </span><span class="nl">"bridgeFee"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"oddsLadderStepSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -2862,11 +2899,6 @@ Up to 50 event IDs can be supplied at a time.
 <td>A mapping from network id -&gt; canonical token name -&gt; token address of assets supported by the exchange</td>
 </tr>
 <tr>
-<td>bettingEnabled</td>
-<td>boolean</td>
-<td><code>true</code> if betting is enabled for your region, false otherwise. See <a href="https://help.sx.bet/en/articles/3613372-terms-and-conditions">here</a> for the supported regions</td>
-</tr>
-<tr>
 <td>totalVolume</td>
 <td>number</td>
 <td>All time total volume on the exchange</td>
@@ -2891,8 +2923,13 @@ Up to 50 event IDs can be supplied at a time.
 <td>number</td>
 <td>USD fee for bridge transaction from Polygon to SX Network</td>
 </tr>
+<tr>
+<td>oddsLadderStepSize</td>
+<td>number</td>
+<td>Odds ladder step size. See <a href="#post-a-new-order">the post a new order section</a></td>
+</tr>
 </tbody></table>
-<h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders'</span>
+<h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/orders'</span>
 </code></pre></div>
 <blockquote>
 <p>The above command returns JSON structured like this</p>
@@ -2953,7 +2990,7 @@ Up to 50 event IDs can be supplied at a time.
 </span></code></pre></div>
 <p>This endpoint returns active orders on the exchange based on a few parameters</p>
 <h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://api.sx.bet/orders</code></p>
+<p><code>GET https://api.sx.bet/orders</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -2967,7 +3004,7 @@ Up to 50 event IDs can be supplied at a time.
 <td>marketHashes</td>
 <td>false</td>
 <td>string[]</td>
-<td>Only get orders for these market hashes</td>
+<td>Only get orders for these market hashes. Comma separated.</td>
 </tr>
 <tr>
 <td>baseToken</td>
@@ -2980,6 +3017,12 @@ Up to 50 event IDs can be supplied at a time.
 <td>false</td>
 <td>string</td>
 <td>Only get orders for this market maker</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>false</td>
+<td>string</td>
+<td>Only get orders for this event ID</td>
 </tr>
 </tbody></table>
 
@@ -3184,38 +3227,41 @@ Your assets must be on SX Network to place or fill orders via the API.
 
 <span class="c1">// Odds ladder testing</span>
 
-<span class="k">import</span> <span class="p">{</span> <span class="nx">PERCENTAGE_PRECISION_EXPONENT</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@betx/sportx-contracts</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BigNumber</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">bignumber.js</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">BigNumber</span> <span class="k">as</span> <span class="nx">EthBigNumber</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">export</span> <span class="kd">const</span> <span class="nx">ODDS_LADDER_STEP_SIZE</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span> <span class="c1">// (0.1% = 1, 0.5% = 5, etc)</span>
 
 <span class="cm">/**
  * Check if the odds are valid, i.e., in one of the allowed steps
  * @param odds Odds to check
  */</span>
-<span class="k">export</span> <span class="kd">function</span> <span class="nx">checkOddsLadderValid</span><span class="p">(</span><span class="nx">odds</span><span class="p">:</span> <span class="nx">EthBigNumber</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">checkOddsLadderValid</span><span class="p">(</span>
+  <span class="nx">odds</span><span class="p">:</span> <span class="nx">EthBigNumber</span><span class="p">,</span>
+  <span class="nx">stepSizeOverride</span><span class="p">?:</span> <span class="kr">number</span>
+<span class="p">)</span> <span class="p">{</span>
   <span class="c1">// Logic:</span>
   <span class="c1">// 100% = 10^20</span>
   <span class="c1">// 10% = 10^19</span>
   <span class="c1">// 1% = 10^18</span>
   <span class="c1">// 0.1% = 10^17</span>
-  <span class="k">return</span> <span class="nx">odds</span><span class="p">.</span><span class="nx">mod</span><span class="p">(</span><span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">pow</span><span class="p">(</span><span class="mi">17</span><span class="p">)).</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">odds</span>
+    <span class="p">.</span><span class="nx">mod</span><span class="p">(</span><span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">pow</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nx">mul</span><span class="p">(</span><span class="nx">ODDS_LADDER_STEP_SIZE</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="cm">/**
- * Rounds odds to the nearest step. If you're examining maker odds, a higher implied is better for the maker, so you should want to round up
+ * Rounds odds to the nearest step.
  * @param odds Odds to round.
- * @param equidistantRoundUp If true, round up at equidistant (0.5 -&gt; 1). Default true.
  */</span>
-<span class="k">export</span> <span class="kd">function</span> <span class="nx">roundOddsToNearestStep</span><span class="p">(</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">roundDownOddsToNearestStep</span><span class="p">(</span>
   <span class="nx">odds</span><span class="p">:</span> <span class="nx">EthBigNumber</span><span class="p">,</span>
-  <span class="nx">equidistantRoundUp</span><span class="p">:</span> <span class="nx">boolean</span> <span class="o">=</span> <span class="kc">true</span>
+  <span class="nx">stepSizeOverride</span><span class="p">?:</span> <span class="kr">number</span>
 <span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">step</span> <span class="o">=</span> <span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">pow</span><span class="p">(</span><span class="mi">17</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">step</span> <span class="o">=</span> <span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">pow</span><span class="p">(</span><span class="mi">16</span><span class="p">).</span><span class="nx">mul</span><span class="p">(</span><span class="nx">ODDS_LADDER_STEP_SIZE</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">bnStep</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BigNumber</span><span class="p">(</span><span class="nx">step</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
   <span class="kd">const</span> <span class="nx">bnOdds</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BigNumber</span><span class="p">(</span><span class="nx">odds</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-  <span class="kd">const</span> <span class="nx">firstPassDivision</span> <span class="o">=</span> <span class="nx">bnOdds</span>
-    <span class="p">.</span><span class="nx">dividedBy</span><span class="p">(</span><span class="nx">bnStep</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">equidistantRoundUp</span> <span class="p">?</span> <span class="mi">4</span> <span class="p">:</span> <span class="mi">5</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">firstPassDivision</span> <span class="o">=</span> <span class="nx">bnOdds</span><span class="p">.</span><span class="nx">dividedBy</span><span class="p">(</span><span class="nx">bnStep</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">EthBigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">firstPassDivision</span><span class="p">).</span><span class="nx">mul</span><span class="p">(</span><span class="nx">step</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -3245,7 +3291,9 @@ If the API finds that your balance is consistently below your total exposure req
 
 <p>To offer bets on sx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a>.</p>
 
-<p>We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.1%, meaning that your offer cannot fall between the steps. An offer of 50.1% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 10 ^ 17 and checking if it&#39;s equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.</p>
+<p>We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.25%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 2.5 * 10 ^ 17 and checking if it&#39;s equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.</p>
+
+<p>You can get the current interval from <code>GET /metadata</code>. It will spit out a number from 10 to 100, where 10 = 0.10%, and 25 = 0.25%</p>
 
 <aside class="warning">
 Odds not on the ladder will be rejected and your order(s) will not be posted. 
@@ -4284,7 +4332,7 @@ Note that <code>fillAmounts</code> are from *the perspective of the market maker
 To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
 <h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
-<p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 * 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value</p>
+<p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 * 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SX.bet and their associated decimals value</p>
 
 <table><thead>
 <tr>
@@ -4299,12 +4347,12 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <td>6</td>
 </tr>
 <tr>
-<td>DAI</td>
+<td>WETH</td>
 <td>See <code>https://api.sx.bet/metadata</code> for address</td>
 <td>18</td>
 </tr>
 <tr>
-<td>WETH</td>
+<td>WSX</td>
 <td>See <code>https://api.sx.bet/metadata</code> for address</td>
 <td>18</td>
 </tr>
@@ -4422,21 +4470,42 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <h1 id='websocket-api'>Websocket API</h1>
 <p>You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.</p>
 <h2 id='initialization'>Initialization</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">ably</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ably</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">axios</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">createTokenRequest</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span>
+    <span class="dl">"</span><span class="s2">https://api.sx.bet/user/token</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SX_BET_API_KEY</span><span class="p">,</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+  <span class="p">);</span>
+  <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">realtime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
-    <span class="na">authUrl</span><span class="p">:</span> <span class="s2">`https://api.sx.bet/user/token`</span><span class="p">,</span>
+      <span class="na">authCallback</span><span class="p">:</span> <span class="k">async</span> <span class="p">(</span><span class="nx">tokenParams</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="k">try</span> <span class="p">{</span>
+              <span class="kd">const</span> <span class="nx">tokenRequest</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">createTokenRequest</span><span class="p">()</span> 
+              <span class="c1">// Make a network request to GET /user/token passing in </span>
+              <span class="c1">// `x-api-key: [YOUR_API_KEY]` as a header</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenRequest</span><span class="p">)</span>
+          <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
+          <span class="p">}</span>
+      <span class="p">}</span>
   <span class="p">});</span>
-  <span class="k">await</span> <span class="k">new</span> <span class="nb">Promise</span><span class="o">&lt;</span><span class="k">void</span><span class="o">&gt;</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">realtime</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="nx">resolve</span><span class="p">();</span>
-    <span class="p">});</span>
-    <span class="c1">// 10s timeout to connect</span>
-    <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">reject</span><span class="p">(),</span> <span class="mi">10000</span><span class="p">);</span>
-  <span class="p">});</span>
+  <span class="k">await</span> <span class="nx">ablyClient</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See <a href="#https://ably.com/documentation/quick-start-guide">this link</a> for a basic overview of the API in other languages.</p>
+<p>We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See <a href="https://ably.com/documentation/quick-start-guide">this link</a> for a basic overview of the API in other languages.</p>
+
+<aside class="info">
+You must have a valid API key to subscribe to realtime channels via the API.
+</aside>
 
 <aside class="warning">
 You only need one instance of the <code>ably</code> object to connect to the API. Connections to multiple channels are multiplexed though the single network connection. If you create too many individual connections, you will be forcefully unsubscribed from all channels and disconnected.
