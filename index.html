@@ -342,6 +342,9 @@
               </ul>
           </li>
           <li>
+            <a href="#parlay-markets" class="toc-h1 toc-link" data-title="Parlay Markets">Parlay Markets</a>
+          </li>
+          <li>
             <a href="#leagues" class="toc-h1 toc-link" data-title="Leagues">Leagues</a>
               <ul class="toc-list-h2">
                   <li>
@@ -470,6 +473,9 @@
                     <a href="#market-updates" class="toc-h2 toc-link" data-title="Market updates">Market updates</a>
                   </li>
                   <li>
+                    <a href="#parlay-market-requests" class="toc-h2 toc-link" data-title="Parlay Market requests">Parlay Market requests</a>
+                  </li>
+                  <li>
                     <a href="#line-changes" class="toc-h2 toc-link" data-title="Line changes">Line changes</a>
                   </li>
                   <li>
@@ -529,7 +535,7 @@
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
 <h1 id='api-key'>API Key</h1>
-<p>In order to use the SX.bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.</p>
+<p>In order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.</p>
 
 <p>Some users may require higher rate limits for their application. SX.bet provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.</p>
 <h2 id='generating-api-key'>Generating API Key</h2>
@@ -853,6 +859,11 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>marketMeta</td>
 <td>string?</td>
 <td>Extra metadata for the market overall</td>
+</tr>
+<tr>
+<td>legs</td>
+<td>Market[]?</td>
+<td>If this is a Parlay Market, this field will contain an array of the underlying Legs as a Market object</td>
 </tr>
 </tbody></table>
 
@@ -1273,6 +1284,26 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 </tbody></table>
 
 <p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted</p>
+<h1 id='parlay-markets'>Parlay Markets</h1>
+<p>Bettors can request a custom parlay on <a href="https://sx.bet">SX.Bet</a> by selecting multiple markets. When they submit a parlay request, a message is sent via Websocket (See <a href="#parlay-market-requests">this link</a> for more details on the request). Once this message is sent, the web client will wait three seconds to allow market makers to submit orders for the parlay market.</p>
+
+<p>Market makers can use the payload data from the Parlay Request to submit an <a href="#post-a-new-order">order</a>. Market makers have a three second window to post orders. After this point, bettors will be shown all available orders at the same time and no other orders will be added.</p>
+
+<p>Bettors can choose which order to take and will be able to fill orders like any other non-parlay order.</p>
+
+<p>Market makers can <a href="#cancel-individual-orders">cancel</a> orders like any other non-parlay order.</p>
+
+<aside class="notice">
+Parlay order book that displays to bettor will automatically close after one minute. Your orders may still be active even though the order book window has closed (the user will not be able to view your order after the window closes).
+</aside>
+
+<aside class="notice">
+Parlay Orders will expire just as normal orders do, so please set the `apiExpiry` on your orders accordingly.
+</aside>
+
+<aside class="notice">
+Parlay Markets act as regular markets, but with additional fields to indicate the underlying legs that make up the Parlay.
+</aside>
 <h1 id='leagues'>Leagues</h1><h2 id='get-leagues'>Get leagues</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/leagues'</span>
 </code></pre></div>
 <blockquote>
@@ -4554,6 +4585,83 @@ You only need one instance of the <code>ably</code> object to connect to the API
 <p><code>markets</code></p>
 <h3 id='message-payload-format'>Message payload format</h3>
 <p>See <a href="#get-specific-markets">the markets section</a> for the format of the message</p>
+<h2 id='parlay-market-requests'>Parlay Market requests</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`markets:parlay`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x38cceead7bda65c18574a34994ebd8af154725d08aa735dcbf26247a7dcc67bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"requestSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100000000"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"legs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0d64c52e8781acdada86920a2d1e5acd6f29dcfe285cf9cae367b671dff05f7d"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xe609a49d083cd41214a0db276c1ba323c4a947eefd2e4260386fec7b5d258188"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>When a bettor requests a Parlay Market, a message is sent via the <code>markets:parlay</code> channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the <code>marketHash</code> that is associated with the Parlay Market. You can post orders to this market as you would for other markets, using this <code>marketHash</code>. The payload also contains the token and size that the bettor is requesting. The <code>legs</code> in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg&#39;s <code>marketHash</code> to determine current orders for that individual market.</p>
+<h3 id='parlaymarket-payload-format'><code>ParlayMarket</code> payload format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>The parlay market associated with this request</td>
+</tr>
+<tr>
+<td>baseToken</td>
+<td>string</td>
+<td>The token this request is denominated in</td>
+</tr>
+<tr>
+<td>requestSize</td>
+<td>number</td>
+<td>The size in baseTokens that the bettor is requesting. See <a href="#tokens">the token section</a> of how to convert this into nominal amounts</td>
+</tr>
+<tr>
+<td>legs</td>
+<td>ParlayMarketLeg[]</td>
+<td>An array of legs that make up the parlay</td>
+</tr>
+</tbody></table>
+<h3 id='parlaymarketleg-payload-format'><code>ParlayMarketLeg</code> payload format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>The market for an individual leg within the parlay</td>
+</tr>
+<tr>
+<td>bettingOutcomeOne</td>
+<td>boolean</td>
+<td>The side the bettor is betting for an individual leg within the parlay</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+Note that the `requestSize` is only indicating what the user is requesting, but does not limit market makers in how much they want to offer. You are allowed to offer any size.
+</aside>
 <h2 id='line-changes'>Line changes</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`main_line`</span><span class="p">);</span>
 <span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
