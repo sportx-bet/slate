@@ -1287,14 +1287,14 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <h1 id='parlay-markets'>Parlay Markets</h1>
 <p>Bettors can request a custom parlay on <a href="https://sx.bet">SX.Bet</a> by selecting multiple markets. When they submit a parlay request, a message is sent via Websocket (See <a href="#parlay-market-requests">this link</a> for more details on the request). Once this message is sent, the web client will wait three seconds to allow market makers to submit orders for the parlay market.</p>
 
-<p>Market makers can use the payload data from the Parlay Request to submit an <a href="#post-a-new-order">order</a>. Market makers have a three second window to post orders. After this point, bettors will be shown all available orders at the same time and no other orders will be added.</p>
+<p>Market makers can use the payload data from the Parlay Request to submit an <a href="#post-a-new-order">order</a>. Market makers have a three second window to post orders. After this point, bettors will be shown all available orders at the same time and no other orders will be viewable by the bettor.</p>
 
 <p>Bettors can choose which order to take and will be able to fill orders like any other non-parlay order.</p>
 
 <p>Market makers can <a href="#cancel-individual-orders">cancel</a> orders like any other non-parlay order.</p>
 
 <aside class="notice">
-Parlay order book that displays to bettor will automatically close after one minute. Your orders may still be active even though the order book window has closed (the user will not be able to view your order after the window closes).
+The parlay order-book that is displayed to a bettor will automatically close after one minute. Your orders may still be active even though the order-book window has closed (the user will not be able to view your order after the window closes).
 </aside>
 
 <aside class="notice">
@@ -4609,7 +4609,9 @@ You only need one instance of the <code>ably</code> object to connect to the API
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>When a bettor requests a Parlay Market, a message is sent via the <code>markets:parlay</code> channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the <code>marketHash</code> that is associated with the Parlay Market. You can post orders to this market as you would for other markets, using this <code>marketHash</code>. The payload also contains the token and size that the bettor is requesting. The <code>legs</code> in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg&#39;s <code>marketHash</code> to determine current orders for that individual market.</p>
+<p>When a bettor requests a Parlay Market, a message is sent via the <code>markets:parlay</code> channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the <code>marketHash</code> that is associated with the Parlay Market. </p>
+
+<p>You can post orders to this market as you would for any other market, using this <code>marketHash</code>. The payload also contains the token and size that the bettor is requesting. The <code>legs</code> in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg&#39;s <code>marketHash</code> to determine current orders for that individual market.</p>
 <h3 id='parlaymarket-payload-format'><code>ParlayMarket</code> payload format</h3>
 <table><thead>
 <tr>
