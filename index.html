@@ -535,9 +535,11 @@
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
 <h1 id='api-key'>API Key</h1>
-<p>In order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.</p>
+<p>In order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to all requests with or without an API Key. The API Key will give you elevated privilages on certain functions.</p>
 
-<p>Some users may require higher rate limits for their application. SX.bet provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.</p>
+<aside class="notice">
+The main usecase for the API Key is to connect to the WebSocket via Ably.
+</aside>
 <h2 id='generating-api-key'>Generating API Key</h2>
 <ol>
 <li>Visit <a href='https://sx.bet'>sx.bet</a> and register/login to your account. You can connect your MetaMask wallet, or login using your Fortmatic email address.</li>
@@ -552,14 +554,14 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <aside class="notice">
 If you lose your key, you can generate a new one by following the same steps. Any previous keys used will be unauthorized if you generate a new key.
 </aside>
-<h2 id='usage'>Usage</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/markets/active?onlyMainLine=true'</span> <span class="se">\</span>
+<h2 id='usage'>Usage</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/user/token'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'X-Api-Key: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'</span>
 </code></pre></div>
 <blockquote>
-<p>You must fill your API Key in the header <code>X-Api-Key</code>. The above sample command returns JSON as expected but will allow elevated rate limits.</p>
+<p>You must fill your API Key in the header <code>X-Api-Key</code>. The above is a sample command to create an Ably Token Request.</p>
 </blockquote>
 
-<p>Once your API Key is generated (see above), you can use it in your HTTP Requests as a header to automatically allow elevated rate limits. You must add it as a HTTP Header with the name: <code>X-Api-Key</code>.</p>
+<p>Once your API Key is generated (see above), you must add it as a HTTP Header with the name: <code>X-Api-Key</code>.</p>
 <h1 id='markets'>Markets</h1><h2 id='get-active-markets'>Get active markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/markets/active?onlyMainLine=true'</span>
 </code></pre></div>
 <blockquote>
@@ -4499,6 +4501,10 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <h1 id='fees'>Fees</h1><h2 id='trading'>Trading</h2>
 <p>Fees are capped at 4% on the profits of your bet. This fee can be reduced by staking SX. For example, if you bet 100 USDC to win 200 USDC and you win, your profit is <code>200 - 100 = 100 USDC</code> and the fees paid is <code>100 * 0.04 = 4 USDC</code>. See the <a href="https://sx.bet/token/discount">fee discount page</a> for details. Your fee is further dependent on whether you are a maker or taker in the transaction.</p>
 <h1 id='websocket-api'>Websocket API</h1>
+<aside class="info">
+You must have a valid API key to subscribe to realtime channels via the API. See [here](#api-key) for more info.
+</aside>
+
 <p>You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.</p>
 <h2 id='initialization'>Initialization</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">ably</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ably</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="nx">axios</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">;</span>
@@ -4533,10 +4539,6 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <span class="p">}</span>
 </code></pre></div>
 <p>We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See <a href="https://ably.com/documentation/quick-start-guide">this link</a> for a basic overview of the API in other languages.</p>
-
-<aside class="info">
-You must have a valid API key to subscribe to realtime channels via the API.
-</aside>
 
 <aside class="warning">
 You only need one instance of the <code>ably</code> object to connect to the API. Connections to multiple channels are multiplexed though the single network connection. If you create too many individual connections, you will be forcefully unsubscribed from all channels and disconnected.
