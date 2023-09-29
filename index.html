@@ -4177,7 +4177,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 </span></code></pre></div>
 <p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. <em>Therefore you do not require any MATIC in your wallet to fill orders</em>.</p>
 
-<p>Note that pre-game has a built-in betting delay of 5s and in-game betting has a built-in betting delay of 8s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+<p>Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
 
 <p>To fill orders on sx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a></p>
 
@@ -4502,7 +4502,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <p>Fees are capped at 4% on the profits of your bet. This fee can be reduced by staking SX. For example, if you bet 100 USDC to win 200 USDC and you win, your profit is <code>200 - 100 = 100 USDC</code> and the fees paid is <code>100 * 0.04 = 4 USDC</code>. See the <a href="https://sx.bet/token/discount">fee discount page</a> for details. Your fee is further dependent on whether you are a maker or taker in the transaction.</p>
 <h1 id='websocket-api'>Websocket API</h1>
 <aside class="info">
-<div>You must have a valid API key to subscribe to realtime channels via the API. See <b>API Key</b> for more info.</div>
+You must have a valid API key to subscribe to realtime channels via the API. See [here](#api-key) for more info.
 </aside>
 
 <p>You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.</p>
