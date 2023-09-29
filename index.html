@@ -1145,7 +1145,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <p>This endpoint retrieves specific markets</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/markets/find</code></p>
-<h3 id='request-format'>Request format</h3>
+<h3 id='query-parameters-2'>Query parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -2018,7 +2018,7 @@ Note that this endpoint is only updated every 10m.
 <p>This endpoint returns the status of the passed event IDs.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/fixture/status</code></p>
-<h3 id='request-payload'>Request payload</h3>
+<h3 id='query-parameters-2'>Query parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -2710,7 +2710,7 @@ Note that this endpoint is only updated every 10m.
 <p>This endpoint retrieves live scores for a particular event ID.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/live-scores</code></p>
-<h3 id='request-payload'>Request payload</h3>
+<h3 id='query-parameters'>Query parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -3024,7 +3024,7 @@ Up to 50 event IDs can be supplied at a time.
 <p>This endpoint returns active orders on the exchange based on a few parameters</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/orders</code></p>
-<h3 id='request-payload-parameters'>Request payload parameters</h3>
+<h3 id='query-parameters'>Query parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -3333,7 +3333,7 @@ Odds not on the ladder will be rejected and your order(s) will not be posted.
 </aside>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/new</code></p>
-<h3 id='request-payload-parameters-2'>Request payload parameters</h3>
+<h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -3535,7 +3535,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 </aside>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/v2</code></p>
-<h3 id='request-payload-parameters-3'>Request payload parameters</h3>
+<h3 id='request-payload-parameters-2'>Request payload parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -3694,7 +3694,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 </aside>
 <h3 id='http-request-4'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/event</code></p>
-<h3 id='request-payload-parameters-4'>Request payload parameters</h3>
+<h3 id='request-payload-parameters-3'>Request payload parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -3838,7 +3838,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 </aside>
 <h3 id='http-request-5'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/all</code></p>
-<h3 id='request-payload-parameters-5'>Request payload parameters</h3>
+<h3 id='request-payload-parameters-4'>Request payload parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -4177,7 +4177,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 </span></code></pre></div>
 <p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. <em>Therefore you do not require any MATIC in your wallet to fill orders</em>.</p>
 
-<p>Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+<p>Note that pre-game has a built-in betting delay of 5s and in-game betting has a built-in betting delay of 8s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
 
 <p>To fill orders on sx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a></p>
 
@@ -4190,7 +4190,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 </aside>
 <h3 id='http-request-6'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/fill</code></p>
-<h3 id='request-payload-parameters-6'>Request payload parameters</h3>
+<h3 id='request-payload-parameters-5'>Request payload parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -4502,7 +4502,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <p>Fees are capped at 4% on the profits of your bet. This fee can be reduced by staking SX. For example, if you bet 100 USDC to win 200 USDC and you win, your profit is <code>200 - 100 = 100 USDC</code> and the fees paid is <code>100 * 0.04 = 4 USDC</code>. See the <a href="https://sx.bet/token/discount">fee discount page</a> for details. Your fee is further dependent on whether you are a maker or taker in the transaction.</p>
 <h1 id='websocket-api'>Websocket API</h1>
 <aside class="info">
-You must have a valid API key to subscribe to realtime channels via the API. See [here](#api-key) for more info.
+<div>You must have a valid API key to subscribe to realtime channels via the API. See <b>API Key</b> for more info.</div>
 </aside>
 
 <p>You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.</p>
