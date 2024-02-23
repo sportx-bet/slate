@@ -490,6 +490,9 @@
                   <li>
                     <a href="#order-book-updates" class="toc-h2 toc-link" data-title="Order book updates">Order book updates</a>
                   </li>
+                  <li>
+                    <a href="#best-practices" class="toc-h2 toc-link" data-title="Best Practices">Best Practices</a>
+                  </li>
               </ul>
           </li>
       </ul>
@@ -4510,30 +4513,26 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <span class="k">import</span> <span class="nx">axios</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">createTokenRequest</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span>
-    <span class="dl">"</span><span class="s2">https://api.sx.bet/user/token</span><span class="dl">"</span><span class="p">,</span>
-    <span class="p">{</span>
-      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SX_BET_API_KEY</span><span class="p">,</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-
-  <span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/user/token</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SX_BET_API_KEY</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">});</span>
   <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">realtime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
-      <span class="na">authCallback</span><span class="p">:</span> <span class="k">async</span> <span class="p">(</span><span class="nx">tokenParams</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-          <span class="k">try</span> <span class="p">{</span>
-              <span class="kd">const</span> <span class="nx">tokenRequest</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">createTokenRequest</span><span class="p">()</span> 
-              <span class="c1">// Make a network request to GET /user/token passing in </span>
-              <span class="c1">// `x-api-key: [YOUR_API_KEY]` as a header</span>
-              <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenRequest</span><span class="p">)</span>
-          <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-              <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>
-          <span class="p">}</span>
+    <span class="na">authCallback</span><span class="p">:</span> <span class="k">async</span> <span class="p">(</span><span class="nx">tokenParams</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">tokenRequest</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">createTokenRequest</span><span class="p">();</span>
+        <span class="c1">// Make a network request to GET /user/token passing in</span>
+        <span class="c1">// `x-api-key: [YOUR_API_KEY]` as a header</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenRequest</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
       <span class="p">}</span>
+    <span class="p">},</span>
   <span class="p">});</span>
   <span class="k">await</span> <span class="nx">ablyClient</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">);</span>
 <span class="p">}</span>
@@ -4602,16 +4601,16 @@ You only need one instance of the <code>ably</code> object to connect to the API
   </span><span class="nl">"legs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0d64c52e8781acdada86920a2d1e5acd6f29dcfe285cf9cae367b671dff05f7d"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xe609a49d083cd41214a0db276c1ba323c4a947eefd2e4260386fec7b5d258188"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>When a bettor requests a Parlay Market, a message is sent via the <code>markets:parlay</code> channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the <code>marketHash</code> that is associated with the Parlay Market. </p>
+<p>When a bettor requests a Parlay Market, a message is sent via the <code>markets:parlay</code> channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the <code>marketHash</code> that is associated with the Parlay Market.</p>
 
 <p>You can post orders to this market as you would for any other market, using this <code>marketHash</code>. The payload also contains the token and size that the bettor is requesting. The <code>legs</code> in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg&#39;s <code>marketHash</code> to determine current orders for that individual market.</p>
 <h3 id='parlaymarket-payload-format'><code>ParlayMarket</code> payload format</h3>
@@ -5139,6 +5138,68 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 </tbody></table>
 
 <p>Note that the messages are sent in batches in an array. If you receive two updates for the same <code>orderHash</code> within an update, you can order them by <code>updateTime</code> after converting the <code>updateTime</code> to a BigInt or BigNumber.</p>
+<h2 id='best-practices'>Best Practices</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">Ably</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">ably</span><span class="dl">"</span><span class="p">);</span>
+<span class="k">import</span> <span class="nx">axios</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">getOrders</span><span class="p">(</span><span class="nx">marketHash</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span>
+    <span class="s2">`https://api.sx.bet/orders?marketHashes=</span><span class="p">${</span><span class="nx">marketHash</span><span class="p">}</span><span class="s2">&amp;baseToken=</span><span class="p">${</span><span class="nx">token</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">X-Api-Key</span><span class="dl">"</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">apiKey</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">}</span>
+  <span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">orderStream</span><span class="p">(</span><span class="nx">realtime</span><span class="p">,</span> <span class="nx">marketHash</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`order_book:</span><span class="p">${</span><span class="nx">token</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">marketHash</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">createTokenRequest</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">createTokenRequest</span><span class="dl">"</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/user/token</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">"</span><span class="s2">X-Api-Key</span><span class="dl">"</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">apiKey</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">ably</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
+    <span class="na">authUrl</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://ably.com/ably-auth/token/docs</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">});</span>
+  <span class="kd">const</span> <span class="nx">realtime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
+    <span class="na">authCallback</span><span class="p">:</span> <span class="k">async</span> <span class="p">(</span><span class="nx">tokenParams</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">tokenRequest</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">createTokenRequest</span><span class="p">();</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenRequest</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+  <span class="p">});</span>
+  <span class="k">await</span> <span class="nx">ably</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">realtime</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">realtime</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">initialize</span><span class="p">();</span>
+  <span class="k">await</span> <span class="nx">getOrders</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">marketHash</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">token</span><span class="p">);</span>
+  <span class="k">await</span> <span class="nx">orderStream</span><span class="p">(</span><span class="nx">realtime</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">marketHash</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">token</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">main</span><span class="p">();</span>
+</code></pre></div>
+<p>For optimal state updates, we recommend a combination of HTTP requests and channel subscriptions, utilizing the rewind parameter. HTTP requests provide the current state, while channel subscriptions keep the state updated. The rewind parameter ensures playback of past events, preventing any missed events between the HTTP call and subscription.
+See <a href="https://ably.com/docs/storage-history/history?lang=nodejs">this link</a> for an overview of the rewind parameter and more.</p>
 
       </div>
       <div class="dark-box">
