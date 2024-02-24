@@ -5155,7 +5155,9 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">orderStream</span><span class="p">(</span><span class="nx">realtime</span><span class="p">,</span> <span class="nx">marketHash</span><span class="p">,</span> <span class="nx">token</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`order_book:</span><span class="p">${</span><span class="nx">token</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">marketHash</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`order_book:</span><span class="p">${</span><span class="nx">token</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">marketHash</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">params</span><span class="p">:</span> <span class="p">{</span> <span class="na">rewind</span><span class="p">:</span> <span class="dl">"</span><span class="s2">10s</span><span class="dl">"</span> <span class="p">},</span>
+  <span class="p">});</span>
   <span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
   <span class="p">});</span>
@@ -5173,7 +5175,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <span class="p">}</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">ably</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
+  <span class="kd">const</span> <span class="nx">ablyClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
     <span class="na">authUrl</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://ably.com/ably-auth/token/docs</span><span class="dl">"</span><span class="p">,</span>
   <span class="p">});</span>
   <span class="kd">const</span> <span class="nx">realtime</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Ably</span><span class="p">.</span><span class="nx">Realtime</span><span class="p">.</span><span class="nb">Promise</span><span class="p">({</span>
@@ -5186,7 +5188,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
       <span class="p">}</span>
     <span class="p">},</span>
   <span class="p">});</span>
-  <span class="k">await</span> <span class="nx">ably</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">);</span>
+  <span class="k">await</span> <span class="nx">ablyClient</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">once</span><span class="p">(</span><span class="dl">"</span><span class="s2">connected</span><span class="dl">"</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">realtime</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -5199,7 +5201,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <span class="nx">main</span><span class="p">();</span>
 </code></pre></div>
 <p>For optimal state updates, we recommend a combination of HTTP requests and channel subscriptions, utilizing the rewind parameter. HTTP requests provide the current state, while channel subscriptions keep the state updated. The rewind parameter ensures playback of past events, preventing any missed events between the HTTP call and subscription.
-See <a href="https://ably.com/docs/storage-history/history?lang=nodejs">this link</a> for an overview of the rewind parameter and more.</p>
+See <a href="https://ably.com/docs/channels/options/rewind?lang=nodejs">this link</a> for an overview of the rewind parameter and more.</p>
 
       </div>
       <div class="dark-box">
