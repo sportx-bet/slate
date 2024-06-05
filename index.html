@@ -3483,7 +3483,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   <span class="k">return</span> <span class="nx">payload</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEIP712Payload</span><span class="p">(</span><span class="nx">orderHashes</span><span class="p">,</span> <span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="mi">416</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEIP712Payload</span><span class="p">(</span><span class="nx">orderHashes</span><span class="p">,</span> <span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">chainId</span><span class="p">);</span>
 
 <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
@@ -3641,7 +3641,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
   <span class="nx">sportXeventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
-  <span class="mi">416</span>
+  <span class="nx">chainId</span>
 <span class="p">);</span>
 
 <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
@@ -3786,7 +3786,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
   <span class="k">return</span> <span class="nx">payload</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span><span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="mi">416</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span><span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">chainId</span><span class="p">);</span>
 
 <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
@@ -3899,8 +3899,13 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
   <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">takerAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TAKER_ADDRESS</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">tokenAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_ADDRESS</span><span class="p">;</span>
-  <span class="kd">const</span> <span class="nx">tokenTransferProxyAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_TRANSFER_PROXY_ADDRESS</span><span class="p">;</span> <span class="c1">// get from https://api.sx.bet/metadata</span>
-  <span class="kd">const</span> <span class="nx">EIP712FillHasherAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EIP712_FILL_HASHER_ADDRESS</span><span class="p">;</span> <span class="c1">// get from https://api.sx.bet/metadata</span>
+
+  <span class="c1">// get the following from https://api.sx.bet/metadata</span>
+  <span class="kd">const</span> <span class="nx">tokenTransferProxyAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_TRANSFER_PROXY_ADDRESS</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">EIP712FillHasherAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EIP712_FILL_HASHER_ADDRESS</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">chainId</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CHAIN_ID</span><span class="p">;</span> <span class="c1">// 416 in production</span>
+  <span class="kd">const</span> <span class="nx">domainVersion</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DOMAIN_VERSION</span><span class="p">;</span>
+
   <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span>
     <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PROVIDER_URL</span><span class="p">)</span>
@@ -3962,11 +3967,25 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
         <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
         <span class="na">constant</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
       <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="na">inputs</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">outputs</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">name</span><span class="p">:</span> <span class="dl">""</span><span class="p">,</span>
+            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
+          <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">view</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">constant</span><span class="p">:</span> <span class="kc">true</span>
+      <span class="p">}</span>
     <span class="p">],</span>
     <span class="nx">wallet</span>
   <span class="p">);</span>
 
-  <span class="kd">let</span> <span class="nx">nonce</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">getNonce</span><span class="p">(</span><span class="nx">takerAddress</span><span class="p">);</span>
+  <span class="kd">let</span> <span class="nx">nonce</span><span class="p">:</span> <span class="nx">BigNumber</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">getNonce</span><span class="p">(</span><span class="nx">takerAddress</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">tokenName</span><span class="p">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">name</span><span class="p">();</span>
   <span class="kd">const</span> <span class="nx">abiEncodedFunctionSig</span> <span class="o">=</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="kr">interface</span><span class="p">.</span><span class="nx">encodeFunctionData</span><span class="p">(</span>
     <span class="dl">"</span><span class="s2">approve</span><span class="dl">"</span><span class="p">,</span>
@@ -4055,8 +4074,8 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
     <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Details</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SX Bet</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">version</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DOMAIN_VERSION</span><span class="p">,</span> <span class="c1">// get from https://api.sx.bet/metadata</span>
-      <span class="na">chainId</span><span class="p">:</span> <span class="mi">416</span> <span class="c1">// get from https://api.sx.bet/metadata,</span>
+      <span class="na">version</span><span class="p">:</span> <span class="nx">domainVersion</span><span class="p">,</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="nx">chainId</span><span class="p">,</span>
       <span class="na">verifyingContract</span><span class="p">:</span> <span class="nx">EIP712FillHasherAddress</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
@@ -4103,11 +4122,11 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
     <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">name</span><span class="p">:</span> <span class="nx">tokenName</span><span class="p">,</span>
       <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">salt</span><span class="p">:</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">hexZeroPad</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hexlify</span><span class="p">(</span><span class="mi">416</span><span class="p">),</span> <span class="mi">32</span><span class="p">),</span> <span class="na">https</span><span class="p">:</span><span class="c1">//api.sx.bet/metadata</span>
+      <span class="na">salt</span><span class="p">:</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">hexZeroPad</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hexlify</span><span class="p">(</span><span class="nx">chainId</span><span class="p">),</span> <span class="mi">32</span><span class="p">),</span>
       <span class="na">verifyingContract</span><span class="p">:</span> <span class="nx">tokenAddress</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
-      <span class="nx">nonce</span><span class="p">,</span>
+      <span class="na">nonce</span><span class="p">:</span> <span class="nx">nonce</span><span class="p">.</span><span class="nx">toNumber</span><span class="p">(),</span>
       <span class="na">from</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
       <span class="na">functionSignature</span><span class="p">:</span> <span class="nx">abiEncodedFunctionSig</span><span class="p">,</span>
     <span class="p">},</span>
